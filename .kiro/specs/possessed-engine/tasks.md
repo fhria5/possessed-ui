@@ -27,3 +27,17 @@ target-app nyata + simulasi Mode B. Sisanya tercapai + terverifikasi
 KOREKSI Phase 2 (14 Nov 2026): 2.1 TERCENTANG — capture Playwright/CDP
 sungguhan terbukti (Chromium 156 nyata: DOM snapshot, pageerror stack
 trace `phantom-pay.js:58:23`, throttling 3G; Vitest 69/69, E2E 55/55).
+
+- [x] **Task 6: PBT Exorcism + Karantina + Deck (Phase 3, 14 Nov 2026)**
+  - [x] 6.1 Implement `fast-check` 100-run verification per skenario
+    (seed tetap 20261121/20261122/20261123) dengan arbitrary
+    berbobot-batas; 2 Demon Bug nyata ditemukan + di-shrink
+    (180ms Window 7/100 → 5 klik; Shape-Shifter 33/100 → 1 langkah);
+    Network 3G jujur 0/100 tanpa demon.
+  - [x] 6.2 Auto-Patch: jendela idempotency 1000ms + validasi bentuk cart
+    di `exorcist-healer.ts`; re-verifikasi 100/100 IMMUNE ketiga skenario.
+  - [x] 6.3 Karantina tool MCP: `exorcise_and_patch` yang gagal
+    verifikasi ditolak `tools/call` (error -32099, status `quarantined`)
+    + incident JSON; `GET /api/quarantine` + `GET /api/exorcism`.
+  - [x] 6.4 Deck Exorcism di UI (tab baru): demon, input, shrink,
+    patch, hasil re-verifikasi dari `exorcism-report.json` (angka nyata).
