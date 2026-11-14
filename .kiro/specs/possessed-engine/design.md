@@ -19,8 +19,8 @@ Sumber: Part 2 blueprint (`SPEK.md`).
 |                      POSSESSED UI CORE ENGINE (Node.js / TS)                      |
 |                                                                                   |
 |  1. Poltergeist Chaos Engine       2. CDP & DOM Medium       3. Exorcist Healer   |
-|  - fast-check Action Arbitraries   - Console/Network Hook    - AST/Line Patcher   |
-|  - Race Condition / Latency Chaos  - Invariant Checker       - Auto-Regression    |
+|  - fast-check Action Arbitraries   - Console/Network Hook    - String-Replacement |
+|  - Race Condition / Latency Chaos  - Invariant Checker       - Patcher + LCS Diff |
 |                                                                                   |
 |  4. MCP JSON-RPC 2.0 Server (tools/list, tools/call)         5. Scope Guardrail   |
 +-----------------------------------------------------------------------------------+
@@ -93,14 +93,22 @@ Poltergeist attack to show **`$750.00` exact balance** and **`0 Console Errors`*
 ## Backend HTTP & MCP API Specification
 
 - `GET /api/health` — server status, CDP availability, Kiro `.kiro/` sync status.
-- `POST /api/possess` — body: `{ scenarioId, isPatched, targetUrl? }`. Runs
-  `fast-check` chaos action generation (and optional real Playwright/CDP
-  headless session) and returns `PossessionReport`.
-- `POST /api/exorcise` — body: `{ scenarioId }`. Applies the self-healing
-  patch to `target-app/phantom-pay.js` on disk, records an incident resolution
-  in `.kiro/specs/incidents/`, and re-runs the PBT verification suite.
-- `GET /api/kiro-files` — returns all 9 `.kiro/` files so judges can inspect
-  them directly in the browser.
+- `POST /api/possess` — body: `{ scenarioId, patched?, seed?,
+  networkAttempts?, cdp?, targetUrl?, baseUrl? }`. Runs `fast-check` chaos
+  action generation (and, by default, a real Playwright/CDP headless session)
+  and returns `PossessionReport`.
+- `POST /api/exorcise` — body: `{ scenarioId }`. Writes the self-healing
+  patch to `target-app/phantom-pay.patched.js` (the vulnerable
+  `target-app/phantom-pay.js` is never overwritten), records an incident
+  resolution in `.kiro/specs/incidents/`, and re-runs one possession
+  verification against the patched target.
+- `GET /api/exorcism` — the Phase 3 PBT Exorcism report (100 runs/scenario,
+  demon bugs, shrink steps, re-verification).
+- `GET /api/quarantine` — MCP tools currently quarantined (empty when the
+  post-patch verification holds).
+- `GET /api/kiro-files` — returns every file under `.kiro/` (the 9 core
+  spec/steering/hook/settings files plus incident records — 97 files at
+  Phase 3) so judges can inspect them directly in the browser.
 - `GET /mcp/tools` — JSON-RPC 2.0 `tools/list` exposing `possess_target_ui`,
   `inspect_cdp_forensics`, and `exorcise_and_patch`.
 - `POST /mcp/call` — JSON-RPC 2.0 `tools/call` handler for Kiro IDE agent
