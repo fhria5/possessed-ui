@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Possessed UI Phase 1 — Paranormal Chaos &amp; Self-Healing Agent</title>
+<title>Possessed UI Phase 2 — Paranormal Chaos &amp; Self-Healing Agent</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -33,17 +33,15 @@
         <span class="scenario-name">1. Chronos Race Poltergeist</span>
         <span class="scenario-desc">Triple-click checkout race → double charge</span>
       </button>
-      <button type="button" class="scenario" disabled aria-disabled="true" title="Ships in Phase 2">
+      <button type="button" class="scenario" id="scenario-network" data-scenario="NETWORK_3G_CHAOS" aria-pressed="false">
         <span class="scenario-ico" aria-hidden="true">🌫️</span>
         <span class="scenario-name">2. Latency Wraith</span>
         <span class="scenario-desc">Out-of-order fetch chaos</span>
-        <span class="phase-tag">Phase 2</span>
       </button>
-      <button type="button" class="scenario" disabled aria-disabled="true" title="Ships in Phase 2">
+      <button type="button" class="scenario" id="scenario-storage" data-scenario="STORAGE_XSS_SPECTER" aria-pressed="false">
         <span class="scenario-ico" aria-hidden="true">💀</span>
         <span class="scenario-name">3. Storage &amp; XSS Banshee</span>
         <span class="scenario-desc">Corrupted localStorage + script injection</span>
-        <span class="phase-tag">Phase 2</span>
       </button>
     </div>
 
@@ -112,6 +110,18 @@
       <label class="discount-label" for="discount-input">Discount code
         <input id="discount-input" type="text" placeholder="GHOST10" autocomplete="off">
       </label>
+      <label class="discount-label" for="currency-select">Currency
+        <select id="currency-select">
+          <option value="USD" selected>USD</option>
+          <option value="EUR">EUR</option>
+        </select>
+      </label>
+      <p class="price-line">Displayed price: <strong id="displayed-price">$250.00</strong>
+        <span class="muted" id="price-meta">USD · no discount</span></p>
+      <div class="cart-box">
+        <span class="cart-label">Cart</span>
+        <div class="cart-view" id="cart-view" aria-label="Cart contents"><span class="muted">empty</span></div>
+      </div>
       <button type="button" class="btn pay" id="pay-button">Pay $250</button>
       <div class="integrity">
         <span>State Integrity</span>
@@ -124,14 +134,14 @@
       </div>
       <div class="ghost-cursor" id="ghost-cursor" aria-hidden="true">👻</div>
     </div>
-    <p class="arena-note">The Ghost Cursor is the Poltergeist: it flies to the Pay button
+    <p class="arena-note" id="arena-note">The Ghost Cursor is the Poltergeist: it flies to the Pay button
       and triple-clicks it in 40ms. The 180ms <code>/api/pay</code> latency is
       the race window — every click fires its own charge.</p>
   </section>
 </main>
 
 <footer class="foot">
-  <span>Possessed UI Phase 1 · 1 scenario live (Chronos Race Poltergeist) · 2 scenarios in Phase 2</span>
+  <span>Possessed UI Phase 2 · 3 scenarios live (Race, Latency, Storage &amp; XSS)</span>
   <span>Mode B static simulation — not a real CDP browser session · PhantomPay balance is simulated, not real money.</span>
 </footer>
 
