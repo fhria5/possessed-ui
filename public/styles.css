@@ -1,0 +1,286 @@
+/* Possessed UI — "The Exorcist's Seance Console" (blueprint Part 3). */
+:root {
+  --bg-void: #07080b;
+  --bg-panel: #0f1219;
+  --bg-surface: #161b26;
+  --ectoplasm: #00ff9d;
+  --spectral-violet: #a855f7;
+  --blood-crimson: #ff2a54;
+  --amber-ward: #f59e0b;
+  --text: #e8eaf2;
+  --muted: #9aa3b5;
+  --border: #262d3d;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg-void);
+  color: var(--text);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  line-height: 1.5;
+}
+
+code, pre { font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+:focus-visible { outline: 2px solid var(--ectoplasm); outline-offset: 2px; }
+
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+}
+
+.brand { font-weight: 800; letter-spacing: 0.06em; font-size: 1.15rem; }
+.brand-sub { color: var(--spectral-violet); font-size: 0.8rem; font-weight: 600; }
+
+.badges { display: flex; flex-wrap: wrap; gap: 8px; }
+.badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.badge.ok { color: var(--ectoplasm); border-color: var(--ectoplasm); }
+.badge.warn { color: var(--amber-ward); border-color: var(--amber-ward); }
+
+.seance {
+  display: grid;
+  grid-template-columns: 52% 48%;
+  gap: 16px;
+  padding: 16px 20px;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.console, .arena {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  min-width: 0;
+}
+
+h1 { font-size: 1.35rem; margin: 0 0 6px; }
+h2 { font-size: 1rem; margin: 20px 0 8px; color: var(--ectoplasm); }
+.lede { color: var(--muted); margin: 0 0 4px; }
+.muted { color: var(--muted); font-size: 0.9rem; }
+
+.scenarios { display: grid; gap: 10px; }
+.scenario {
+  display: grid;
+  grid-template-columns: 32px 1fr auto;
+  gap: 4px 10px;
+  align-items: center;
+  min-height: 44px;
+  text-align: left;
+  background: var(--bg-surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  font: inherit;
+}
+.scenario.active { border-color: var(--spectral-violet); box-shadow: 0 0 0 1px var(--spectral-violet); }
+.scenario:disabled { opacity: 0.55; cursor: not-allowed; }
+.scenario-ico { font-size: 1.3rem; grid-row: span 2; }
+.scenario-name { font-weight: 700; }
+.scenario-desc { color: var(--muted); font-size: 0.85rem; grid-column: 2; }
+.phase-tag {
+  grid-row: span 2;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--amber-ward);
+  border: 1px solid var(--amber-ward);
+  border-radius: 999px;
+  padding: 3px 8px;
+}
+
+.controls { display: grid; gap: 10px; }
+.btn {
+  min-height: 44px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  padding: 10px 14px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--text);
+  background: var(--bg-surface);
+}
+.btn.primary { background: var(--spectral-violet); border-color: var(--spectral-violet); color: #fff; }
+.btn.heal { background: var(--ectoplasm); border-color: var(--ectoplasm); color: #04140b; }
+.btn.ghost { background: transparent; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.run-status { color: var(--muted); font-size: 0.92rem; min-height: 1.4em; }
+
+.tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--border); }
+.tab {
+  min-height: 44px;
+  background: transparent;
+  color: var(--muted);
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 8px 12px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.tab.active { color: var(--ectoplasm); border-bottom-color: var(--ectoplasm); }
+.tab-panel { display: none; padding: 12px 0 4px; }
+.tab-panel.active { display: block; }
+.log, .diff {
+  background: #05060a;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 0.82rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 320px;
+  overflow: auto;
+  margin: 8px 0;
+}
+.vault-list { list-style: none; padding: 0; margin: 8px 0; display: grid; gap: 6px; }
+.vault-list button {
+  width: 100%;
+  text-align: left;
+  min-height: 44px;
+  background: var(--bg-surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.arena-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+.arena-head h2 { margin: 0; }
+.arena-sub { color: var(--muted); font-size: 0.85rem; }
+.possessed-badge, .immune-badge {
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 5px 10px;
+  border-radius: 999px;
+}
+.possessed-badge { color: #fff; background: var(--blood-crimson); }
+.immune-badge { color: #04140b; background: var(--ectoplasm); }
+
+.target {
+  position: relative;
+  margin-top: 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  overflow: hidden;
+}
+.target.possessed { animation: glitch 0.45s ease-in-out 2; border-color: var(--blood-crimson); }
+@keyframes glitch {
+  0%, 100% { transform: translate(0, 0); box-shadow: 0 0 0 0 transparent; }
+  25% { transform: translate(-2px, 1px); box-shadow: 3px 0 0 rgba(255, 42, 84, 0.55), -3px 0 0 rgba(0, 255, 157, 0.35); }
+  50% { transform: translate(2px, -1px); box-shadow: -3px 0 0 rgba(255, 42, 84, 0.55), 3px 0 0 rgba(0, 255, 157, 0.35); }
+  75% { transform: translate(-1px, -1px); }
+}
+
+.wallet { display: grid; gap: 2px; }
+.wallet-label { color: var(--muted); font-size: 0.85rem; }
+.wallet-balance { font-size: 2rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+.wallet-meta { color: var(--muted); font-size: 0.85rem; }
+.item-card {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 14px;
+  padding: 12px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.item-ico { font-size: 1.8rem; }
+.item-info { display: grid; }
+.item-info span { color: var(--muted); }
+.discount-label { display: grid; gap: 6px; margin-top: 14px; font-size: 0.9rem; }
+.discount-label input {
+  min-height: 44px;
+  background: var(--bg-panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font: inherit;
+}
+.btn.pay {
+  width: 100%;
+  margin-top: 14px;
+  background: var(--blood-crimson);
+  border-color: var(--blood-crimson);
+  color: #fff;
+  font-size: 1.05rem;
+}
+.integrity { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; margin-top: 16px; font-size: 0.9rem; }
+.meter { height: 10px; background: var(--bg-panel); border-radius: 999px; overflow: hidden; }
+.meter-fill { height: 100%; background: var(--ectoplasm); transition: width 0.4s ease, background 0.4s ease; }
+.console-log { margin-top: 14px; }
+.console-title { font-size: 0.85rem; color: var(--muted); margin-bottom: 6px; }
+.console-log pre {
+  background: #05060a;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 0.82rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 160px;
+  overflow: auto;
+  margin: 0;
+}
+.arena-note { color: var(--muted); font-size: 0.88rem; }
+
+.ghost-cursor {
+  position: absolute;
+  font-size: 2rem;
+  line-height: 1;
+  left: 16px;
+  top: 16px;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  filter: drop-shadow(0 0 12px var(--spectral-violet));
+  transition: left 0.35s ease, top 0.35s ease, opacity 0.2s ease;
+}
+.ghost-cursor.flying { opacity: 1; }
+.ghost-cursor.clicking { transform: scale(0.8); }
+
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 24px;
+  justify-content: space-between;
+  padding: 14px 20px 22px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .seance { grid-template-columns: 1fr; }
+  .brand-sub { display: block; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .target.possessed { animation: none; }
+  .ghost-cursor, .meter-fill { transition: none; }
+}
