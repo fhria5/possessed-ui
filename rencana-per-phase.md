@@ -62,7 +62,7 @@ ketiga skenario; patch Exorcist kini AbortController + escaping HTML.
 
 Angka: Vitest 69/69 (48 regresi Phase 1 tetap hijau + 21 baru, termasuk
 8 tes CDP browser nyata); E2E Playwright independen 55/55 (Mode B 3
-skenario + MCP + CDP via HTTP + guardrail + incident). Repo 70+ blob,
+skenario + MCP + CDP via HTTP + guardrail + incident). Repo 53 blob,
 commit Phase 2 (lihat GitHub). Demo: https://fhria5.github.io/possessed-ui/
 
 ## Phase 3 — PBT Exorcism + self-heal + verifikasi 100 run
