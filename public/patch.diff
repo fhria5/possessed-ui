@@ -28,7 +28,7 @@
      return state.cart;
    }
  
-@@ -75,22 +82,29 @@
+@@ -75,22 +82,34 @@
      });
    }
  
@@ -49,18 +49,39 @@
  
 -  // BUG 2: tanpa AbortController — fetch lama yang selesai belakangan
 -  // menimpa harga terbaru.
-+  // EXORCISED: stale-response guard — superseded requests are ignored.
++  // EXORCISED: AbortController + request sequencing — superseded requests
++  // are cancelled, and a late response is ignored instead of overwriting.
    let latestPriceRequest = 0;
++  let priceAbort = null;
    function fetchPrice(currency, discountCode) {
++    if (priceAbort) priceAbort.abort();
++    const controller = new AbortController();
++    priceAbort = controller;
      const requestId = ++latestPriceRequest;
      const delay = 60 + Math.floor(Math.random() * 240); // 60–300ms acak
      return new Promise((resolve) => {
        setTimeout(() => {
 -        void requestId; // requestId sengaja tidak dipakai untuk membatalkan
-+        if (requestId !== latestPriceRequest) {
++        if (controller.signal.aborted || requestId !== latestPriceRequest) {
 +          resolve({ priceCents: state.displayedPriceCents, currency: state.currency, discountCode: state.discountCode, stale: true });
 +          return;
 +        }
          let price = ITEM_PRICE_CENTS;
          if (discountCode === 'GHOST10') price = Math.round(price * 0.9);
          if (currency === 'EUR') price = Math.round(price * 0.92);
+@@ -113,10 +132,12 @@
+     storage().setItem('phantom_cart', raw);
+   }
+ 
+-  // BUG 3b (STORAGE_XSS_SPECTER): nama item cart diinterpolasi mentah ke
+-  // HTML tanpa escaping — muatan <img onerror=...> dieksekusi saat dirender.
++  // EXORCISED: escape HTML — muatan skrip dirender sebagai teks inert.
++  function escapeHtml(value) {
++    return String(value).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
++  }
+   function cartItemHtml(item) {
+-    return '<div class="cart-item">' + item.name + '</div>';
++    return '<div class="cart-item">' + escapeHtml(item.name) + '</div>';
+   }
+ 
+   function formatCents(cents) {
