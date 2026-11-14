@@ -26,12 +26,12 @@ afterAll(async () => {
 });
 
 describe('GET /api/health', () => {
-  it('reports phase-3 mode and real Playwright CDP', async () => {
+  it('reports phase-4 mode and real Playwright CDP', async () => {
     const res = await fetch(`${base}/api/health`);
     expect(res.status).toBe(200);
     const body = (await res.json()) as { ok: boolean; mode: string; cdp: string; scenarios: string[] };
     expect(body.ok).toBe(true);
-    expect(body.mode).toBe('phase-3');
+    expect(body.mode).toBe('phase-4');
     expect(body.cdp).toBe('playwright-chromium');
     expect(body.scenarios).toEqual(['RACE_DOUBLE_CHARGE', 'NETWORK_3G_CHAOS', 'STORAGE_XSS_SPECTER']);
   });
@@ -218,10 +218,10 @@ describe('MCP over HTTP', () => {
 });
 
 describe('static dashboard', () => {
-  it('serves index.html with the Phase 3 marker', async () => {
+  it('serves index.html with the Phase 4 marker', async () => {
     const res = await fetch(`${base}/`);
     expect(res.status).toBe(200);
     const html = await res.text();
-    expect(html).toContain('Possessed UI Phase 3');
+    expect(html).toContain('Possessed UI Phase 4');
   });
 });
