@@ -3,8 +3,8 @@
  *
  * The patch is REAL, not a description: the healer reads the vulnerable
  * target-app/phantom-pay.js, applies exact string replacements for the
- * three known bugs (inFlightLock + idempotencyKey, AbortController-style
- * stale-response guard, try/catch storage fallback), builds a genuine
+ * known bugs (inFlightLock + idempotencyKey, AbortController + stale-response
+ * guard, try/catch storage fallback, HTML escaping), builds a genuine
  * unified diff from the old/new text, and writes the patched source to
  * target-app/phantom-pay.patched.js (the vulnerable original is NEVER
  * overwritten) plus an incident record in .kiro/specs/incidents/.
@@ -20,9 +20,9 @@ const DESCRIPTIONS: Record<PossessionScenarioId, string> = {
   RACE_DOUBLE_CHARGE:
     'Add inFlightLock + idempotencyKey to handleCheckout(): concurrent clicks share one /api/pay call, so a triple-click charges exactly once.',
   NETWORK_3G_CHAOS:
-    'Add a request-token guard to fetchPrice(): a stale response that resolves after a newer request is ignored instead of overwriting the latest price.',
+    'Add an AbortController + request-token guard to fetchPrice(): a superseded request is aborted and its late response ignored instead of overwriting the latest price.',
   STORAGE_XSS_SPECTER:
-    'Wrap JSON.parse in loadCart() with try/catch: a corrupted cart falls back to an empty cart and records the failure instead of throwing.',
+    'Wrap JSON.parse in loadCart() with try/catch and escape cart item names in cartItemHtml(): a corrupted cart falls back to an empty cart and an XSS payload renders as inert text instead of executing.',
 };
 
 const LOAD_CART_OLD = `  // BUG 3: tanpa try/catch — cart rusak = SyntaxError tak tertangkap.
@@ -91,14 +91,19 @@ const FETCH_PRICE_OLD = `  // BUG 2: tanpa AbortController — fetch lama yang s
     });
   }`;
 
-const FETCH_PRICE_NEW = `  // EXORCISED: stale-response guard — superseded requests are ignored.
+const FETCH_PRICE_NEW = `  // EXORCISED: AbortController + request sequencing — superseded requests
+  // are cancelled, and a late response is ignored instead of overwriting.
   let latestPriceRequest = 0;
+  let priceAbort = null;
   function fetchPrice(currency, discountCode) {
+    if (priceAbort) priceAbort.abort();
+    const controller = new AbortController();
+    priceAbort = controller;
     const requestId = ++latestPriceRequest;
     const delay = 60 + Math.floor(Math.random() * 240); // 60–300ms acak
     return new Promise((resolve) => {
       setTimeout(() => {
-        if (requestId !== latestPriceRequest) {
+        if (controller.signal.aborted || requestId !== latestPriceRequest) {
           resolve({ priceCents: state.displayedPriceCents, currency: state.currency, discountCode: state.discountCode, stale: true });
           return;
         }
@@ -111,6 +116,20 @@ const FETCH_PRICE_NEW = `  // EXORCISED: stale-response guard — superseded req
         resolve({ priceCents: price, currency, discountCode });
       }, delay);
     });
+  }`;
+
+const CART_HTML_OLD = `  // BUG 3b (STORAGE_XSS_SPECTER): nama item cart diinterpolasi mentah ke
+  // HTML tanpa escaping — muatan <img onerror=...> dieksekusi saat dirender.
+  function cartItemHtml(item) {
+    return '<div class="cart-item">' + item.name + '</div>';
+  }`;
+
+const CART_HTML_NEW = `  // EXORCISED: escape HTML — muatan skrip dirender sebagai teks inert.
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  function cartItemHtml(item) {
+    return '<div class="cart-item">' + escapeHtml(item.name) + '</div>';
   }`;
 
 function replaceOnce(src: string, oldText: string, newText: string, label: string): string {
@@ -200,6 +219,7 @@ export function buildPatchedSource(): string {
   let patched = replaceOnce(vulnerable, LOAD_CART_OLD, LOAD_CART_NEW, 'loadCart');
   patched = replaceOnce(patched, CHECKOUT_OLD, CHECKOUT_NEW, 'handleCheckout');
   patched = replaceOnce(patched, FETCH_PRICE_OLD, FETCH_PRICE_NEW, 'fetchPrice');
+  patched = replaceOnce(patched, CART_HTML_OLD, CART_HTML_NEW, 'cartItemHtml');
   const header =
     '// EXORCISED — patched by Possessed UI Exorcist (inFlightLock + idempotencyKey\n' +
     '// + stale-response guard + safe storage fallback). Generated from ' +
