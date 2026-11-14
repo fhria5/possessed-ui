@@ -16,8 +16,10 @@ rusak, respons API datang tak berurutan. Possessed UI adalah agen otonom yang:
    klik beruntun, lonjakan latensi, mutasi storage, payload batas.
 2. **Medium** — menangkap DOM snapshot, jejak jaringan, dan stack trace, lalu
    memetakan crash ke invariant EARS di `.kiro/specs/`.
-3. **Exorcist** — mensintesis patch (idempotency, debounce, sanitasi input),
-   menerapkannya ke file target, lalu menyerang ulang untuk membuktikan 0 crash.
+3. **Exorcist** — mensintesis patch (idempotency lock, `AbortController`,
+   safe storage parse, sanitasi HTML), menulisnya ke
+   `target-app/phantom-pay.patched.js` (file vulnerable asli tidak pernah
+   ditimpa), lalu menyerang ulang untuk membuktikan 0 crash.
 
 ## 3 skenario
 
@@ -59,7 +61,16 @@ $250. Semua saldo simulasi, bukan uang nyata.
   **100/100 IMMUNE di ketiga skenario**; Network 3G jujur 0/100 tanpa demon.
   Karantina tool MCP (`exorcise_and_patch` ditolak status `quarantined` bila
   verifikasi gagal) + Deck Exorcism di UI. Vitest 93/93, E2E 55/55 + 32/32.
-- Phase 4 (berikutnya): polish + uji HP.
+- **Phase 4 SELESAI + LIVE** (14 Nov 2026): polish gothic final + audit
+  `.kiro/` — `.tabs` wrap (perbaiki overflow 9px di 390px), tap target
+  ≥44px terukur di 390/1280, `:focus-visible` terverifikasi,
+  `prefers-reduced-motion` terukur, favicon lokal; 8 klaim palsu/kadaluarsa
+  di `.kiro/` diperbaiki (nama tool MCP, label tombol, 100-run, "9 file
+  .kiro", `mcp-stdio.ts` yang hilang, `npm run test:pbt` yang hilang);
+  `src/engine/mcp-stdio.ts` dibuat (transport stdio JSON-RPC nyata).
+  Checklist uji HP 9 item di `rencana-per-phase.md` — menunggu laporan uji
+  HP user sebelum Phase 4 dinyatakan selesai penuh.
+- Phase 5 (berikutnya): video + submit.
 
 ## Struktur
 
