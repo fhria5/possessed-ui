@@ -150,4 +150,31 @@ describe('possess — NETWORK_3G_CHAOS', () => {
     expect(report.status).toBe('EXORCISED_IMMUNE');
     expect(report.pbtRunsExecuted).toBe(12);
   }, 30000);
+
+  it('patched fetchPrice aborts the superseded request (stale:true, state untouched)', async () => {
+    const patched = loadPatched();
+    const first = patched.fetchPrice('USD', 'GHOST10');
+    const second = patched.fetchPrice('EUR', '');
+    const [a, b] = await Promise.all([first, second]);
+    expect(a.stale).toBe(true);
+    expect(b.stale).toBe(undefined);
+    expect(patched.state.currency).toBe('EUR');
+    expect(patched.state.displayedPriceCents).toBe(23000);
+  }, 30000);
+});
+
+describe('possess — STORAGE_XSS_SPECTER (Phase 2: XSS sink)', () => {
+  it('vulnerable cartItemHtml interpolates markup raw (XSS sink open)', () => {
+    const vuln = freshVulnerable();
+    const html = vuln.cartItemHtml({ name: '<img src=x onerror="alert(1)">' });
+    expect(html).toContain('<img src=x onerror="alert(1)">');
+  });
+
+  it('patched cartItemHtml escapes markup to inert text', () => {
+    const patched = loadPatched();
+    const html = patched.cartItemHtml({ name: '<img src=x onerror="alert(1)">' });
+    expect(html).not.toContain('<img');
+    expect(html).toContain('&lt;img');
+    expect(html).toContain('&quot;');
+  });
 });
