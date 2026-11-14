@@ -48,15 +48,22 @@ Catatan: Task 2.1 (.kiro) BELUM dicentang — capture Playwright/CDP sungguhan
 belum ada; forensik Phase 1 berasal dari run in-process terhadap target-app
 nyata + simulasi Mode B di browser. Jujur di footer demo + /api/health.
 
-## Phase 2 — 3 skenario + MCP + guardrail
+## Phase 2 — 3 skenario + MCP + guardrail (SELESAI 14 Nov 2026 ~22:40 WITA)
 
-Scope: skenario 2 Latency Wraith + skenario 3 Storage & XSS Banshee;
-MCP server (`tools/list`, `tools/call`: `possess_target_ui`,
-`inspect_cdp_forensics`, `exorcise_and_patch`); guardrail allowlist
-localhost/127.0.0.1 saja; tab Forensics & Diff + Live MCP Stream + `.kiro/` Vault.
+Scope tercapai: skenario 2 Latency Wraith + skenario 3 Storage & XSS Banshee
+end-to-end di demo Mode B (stale $225.00 → exorcise → $230.00 EUR;
+SyntaxError nyata + XSS 1x → exorcise → fallback, 0 eksekusi); CDP
+SUNGGUHAN via Playwright (Task 2.1 — Chromium 156 nyata, DOM snapshot,
+pageerror stack trace `phantom-pay.js:58:23`, throttling 3G tercatat);
+forensik server dari CDP nyata (default `cdp: true`, fallback in-process
+dilabeli jujur); MCP end-to-end via HTTP (ketiga tool); guardrail
+localhost-only ditegakkan + diuji (example.com → 400); incident JSON untuk
+ketiga skenario; patch Exorcist kini AbortController + escaping HTML.
 
-Exit: ketiga skenario jalan; MCP merespons via JSON-RPC; URL eksternal ditolak
-guardrail; regresi Phase 1 tetap hijau.
+Angka: Vitest 69/69 (48 regresi Phase 1 tetap hijau + 21 baru, termasuk
+8 tes CDP browser nyata); E2E Playwright independen 55/55 (Mode B 3
+skenario + MCP + CDP via HTTP + guardrail + incident). Repo 70+ blob,
+commit Phase 2 (lihat GitHub). Demo: https://fhria5.github.io/possessed-ui/
 
 ## Phase 3 — PBT Exorcism + self-heal + verifikasi 100 run
 
