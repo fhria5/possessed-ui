@@ -113,6 +113,12 @@ function createPhantomPay() {
     storage().setItem('phantom_cart', raw);
   }
 
+  // BUG 3b (STORAGE_XSS_SPECTER): nama item cart diinterpolasi mentah ke
+  // HTML tanpa escaping — muatan <img onerror=...> dieksekusi saat dirender.
+  function cartItemHtml(item) {
+    return '<div class="cart-item">' + item.name + '</div>';
+  }
+
   function formatCents(cents) {
     return '$' + (cents / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
@@ -135,6 +141,7 @@ function createPhantomPay() {
     fetchPrice,
     saveCart,
     corruptCart,
+    cartItemHtml,
     snapshot,
     formatCents,
     ITEM_PRICE_CENTS,
