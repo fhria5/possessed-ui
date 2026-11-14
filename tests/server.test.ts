@@ -1,7 +1,7 @@
 /**
  * Server tests: HTTP + MCP endpoints on an ephemeral port.
  * Pattern: app.listen(0) + fetch (same as NecroMCP Phase 3).
- * Phase 2: all 3 scenarios live; /api/possess defaults to real Chromium
+ * Phase 3: all 3 scenarios live; /api/possess defaults to real Chromium
  * CDP forensics (cdp: true) — fast tests below pass cdp: false explicitly.
  * The real-browser path is covered by tests/cdp.test.ts + E2E Phase 2.
  */
@@ -26,12 +26,12 @@ afterAll(async () => {
 });
 
 describe('GET /api/health', () => {
-  it('reports phase-2 mode and real Playwright CDP', async () => {
+  it('reports phase-3 mode and real Playwright CDP', async () => {
     const res = await fetch(`${base}/api/health`);
     expect(res.status).toBe(200);
     const body = (await res.json()) as { ok: boolean; mode: string; cdp: string; scenarios: string[] };
     expect(body.ok).toBe(true);
-    expect(body.mode).toBe('phase-2');
+    expect(body.mode).toBe('phase-3');
     expect(body.cdp).toBe('playwright-chromium');
     expect(body.scenarios).toEqual(['RACE_DOUBLE_CHARGE', 'NETWORK_3G_CHAOS', 'STORAGE_XSS_SPECTER']);
   });
@@ -218,10 +218,10 @@ describe('MCP over HTTP', () => {
 });
 
 describe('static dashboard', () => {
-  it('serves index.html with the Phase 2 marker', async () => {
+  it('serves index.html with the Phase 3 marker', async () => {
     const res = await fetch(`${base}/`);
     expect(res.status).toBe(200);
     const html = await res.text();
-    expect(html).toContain('Possessed UI Phase 2');
+    expect(html).toContain('Possessed UI Phase 3');
   });
 });
