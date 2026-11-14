@@ -34,6 +34,29 @@ export interface PossessionForensics {
   stackTrace: string;
 }
 
+export interface CdpCaptureMeta {
+  capturedVia: 'playwright-cdp' | 'fallback-in-process';
+  browser?: string;
+  cdpProtocol?: string;
+  targetUrl?: string;
+  throttling?: { profile: string; latencyMs: number; downloadKbps: number; uploadKbps: number } | null;
+  networkEvents?: Array<{ url: string; status: number; durationMs: number }>;
+  observed?: {
+    balance: string;
+    balanceCents: number;
+    charges: number;
+    displayedPrice: string;
+    currency: string;
+    discountCode: string;
+    cartStatus: string;
+    xssFired: number;
+    consoleErrors: string[];
+    patched: boolean;
+  };
+  pageErrors?: Array<{ message: string; stack: string }>;
+  reason?: string;
+}
+
 export interface PossessionReport {
   sessionId: string;
   scenarioId: PossessionScenarioId;
@@ -49,6 +72,8 @@ export interface PossessionReport {
     unifiedDiff: string;
     patchedCode: string;
   };
+  /** Real-browser capture metadata (Phase 2); absent on the fast in-process path. */
+  cdpCapture?: CdpCaptureMeta;
 }
 
 export interface PhantomPaySnapshot {
@@ -81,6 +106,7 @@ export interface PhantomPayInstance {
   }>;
   saveCart: (cart: unknown) => unknown;
   corruptCart: (raw: string) => void;
+  cartItemHtml: (item: { name: string }) => string;
   snapshot: () => PhantomPaySnapshot;
   formatCents: (cents: number) => string;
   ITEM_PRICE_CENTS: number;
