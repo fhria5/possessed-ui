@@ -3,7 +3,8 @@
  * Generate static assets the Mode B dashboard fetches at runtime:
  *  - public/patch.diff — real unified diff from the Exorcist healer
  *    (dist/engine/exorcist-healer.js must be built first: npm run build)
- *  - public/kiro-files.json — the 9 .kiro/ files, for the Vault tab
+ *  - public/kiro-files.json — every .kiro/ file (9 core + incident records),
+ *    for the Vault tab
  * Run: node tools/gen_assets.cjs   (also run by tools/deploy_possessed.py)
  */
 'use strict';
