@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Possessed UI — CDP Harness (Mode A only)</title>
+<link rel="icon" href="data:,">
+<style>
+  body { background: #07080b; color: #e8e8e8; font-family: monospace; padding: 16px; }
+  #phantom-pay { border: 1px solid #333; padding: 16px; max-width: 560px; }
+  button, input, select { font: inherit; margin: 4px; padding: 6px 10px; }
+  #cart-view { border: 1px dashed #555; min-height: 24px; margin: 8px 0; padding: 4px; }
+  #console-log { white-space: pre-wrap; color: #f59e0b; }
+</style>
+<script>
+  // Seeded PRNG override — installed BEFORE target-app loads, so its
+  // Math.random() delays are deterministic for a given ?seed=.
+  // mulberry32: small deterministic PRNG (public-domain algorithm).
+  (function () {
+    var params = new URLSearchParams(location.search);
+    var seed = parseInt(params.get('seed') || '1', 10);
+    function mulberry32(a) {
+      return function () {
+        a |= 0; a = (a + 0x6D2B79F5) | 0;
+        var t = Math.imul(a ^ (a >>> 15), 1 | a);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+    var rng = mulberry32(seed);
+    Math.random = rng;
+    window.__reseed = function (s) { Math.random = mulberry32(s); };
+    window.__seed = seed;
+  })();
+</script>
+<script>
+  // Synchronous loader: ?patched=1 loads the Exorcist-patched target,
+  // otherwise the vulnerable one. document.write during parsing keeps the
+  // load synchronous, so window.PhantomPay is final before the driver binds.
+  (function () {
+    var params = new URLSearchParams(location.search);
+    var src = params.get('patched') === '1'
+      ? '/target-app/phantom-pay.patched.js'
+      : '/target-app/phantom-pay.js';
+    document.write('<script src="' + src + '"><\/script>');
+  })();
+</script>
+</head>
+<body>
+<div id="phantom-pay" data-balance-cents="100000">
+  <div>Wallet Balance: <span id="wallet-balance">$1,000.00</span></div>
+  <div>Charges: <span id="charges-count">0</span></div>
+  <div>Displayed price: <span id="displayed-price">$250.00</span></div>
+  <div>Currency: <span id="currency-label">USD</span></div>
+  <div>Discount: <span id="discount-label"></span></div>
+  <div>Cart: <span id="cart-status">empty</span></div>
+  <label>Currency
+    <select id="currency-select">
+      <option value="USD" selected>USD</option>
+      <option value="EUR">EUR</option>
+    </select>
+  </label>
+  <label>Discount code
+    <input id="discount-input" type="text" autocomplete="off">
+  </label>
+  <button type="button" id="pay-button">Pay $250</button>
+  <button type="button" id="reload-cart">Reload cart</button>
+  <div id="cart-view" aria-label="Cart contents"></div>
+  <pre id="console-log">ready</pre>
+</div>
+<script>
+  // Harness driver API (used by the Playwright CDP capture in
+  // src/engine/cdp-observer.ts). The target app itself is the REAL
+  // target-app/phantom-pay.js (vulnerable) or .patched.js (?patched=1);
+  // every observation below comes from a real Chromium page.
+  (function () {
+    var params = new URLSearchParams(location.search);
+    var patched = params.get('patched') === '1';
+    window.__xssFired = 0;
+    window.__patched = patched;
+
+    function $ (id) { return document.getElementById(id); }
+    function log(line) {
+      $('console-log').textContent += '\n' + line;
+    }
+    function render() {
+      var snap = window.PhantomPay.snapshot();
+      $('wallet-balance').textContent = snap.balance;
+      $('charges-count').textContent = String(snap.charges);
+      $('displayed-price').textContent = snap.displayedPrice;
+      $('currency-label').textContent = window.PhantomPay.state.currency;
+      $('discount-label').textContent = window.PhantomPay.state.discountCode;
+      document.getElementById('phantom-pay').setAttribute('data-balance-cents', String(snap.balanceCents));
+    }
+    function renderCart() {
+      var cart = window.PhantomPay.state.cart;
+      var items = cart && Array.isArray(cart.items) ? cart.items : [];
+      var html = items.map(function (it) { return window.PhantomPay.cartItemHtml(it); }).join('');
+      $('cart-view').innerHTML = html;
+      $('cart-status').textContent = items.length === 0 ? 'empty' : items.length + ' item(s)';
+    }
+
+    $('pay-button').addEventListener('click', function () {
+      // Deliberately NO try/catch: a failure here is a real pageerror.
+      window.PhantomPay.handleCheckout().then(render);
+    });
+    $('reload-cart').addEventListener('click', function () {
+      // Deliberately NO try/catch: corrupted storage throws a REAL
+      // pageerror with a REAL stack trace in the browser.
+      window.PhantomPay.loadCart();
+      renderCart();
+      log('cart reloaded');
+    });
+    $('currency-select').addEventListener('change', function () {
+      window.PhantomPay.fetchPrice($('currency-select').value, window.PhantomPay.state.discountCode).then(render);
+    });
+    $('discount-input').addEventListener('change', function () {
+      window.PhantomPay.fetchPrice(window.PhantomPay.state.currency, $('discount-input').value).then(render);
+    });
+
+    window.__possessed = {
+      state: function () {
+        var snap = window.PhantomPay.snapshot();
+        return {
+          balance: snap.balance,
+          balanceCents: snap.balanceCents,
+          charges: snap.charges,
+          displayedPrice: snap.displayedPrice,
+          currency: window.PhantomPay.state.currency,
+          discountCode: window.PhantomPay.state.discountCode,
+          cartStatus: $('cart-status').textContent,
+          xssFired: window.__xssFired || 0,
+          consoleErrors: window.PhantomPay.state.consoleErrors.slice(),
+          patched: window.__patched,
+        };
+      },
+      reseed: function (seed) { window.__reseed(seed); },
+      // One price fetch through the REAL target app (updates DOM on resolve).
+      fetchPrice: function (currency, discountCode) {
+        return window.PhantomPay.fetchPrice(currency, discountCode).then(function (r) {
+          render();
+          return r;
+        });
+      },
+      corruptCart: function (raw) { window.PhantomPay.corruptCart(raw); },
+      reloadCart: function () {
+        window.PhantomPay.loadCart();
+        renderCart();
+      },
+      renderCartItem: function (name) {
+        window.PhantomPay.state.cart = { items: [{ name: name }] };
+        renderCart();
+      },
+      log: log,
+      render: render,
+    };
+    render();
+  })();
+</script>
+</body>
+</html>
