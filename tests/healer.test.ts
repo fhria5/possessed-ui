@@ -47,6 +47,18 @@ describe('synthesizePatch', () => {
     expect(src).toContain('fetchPrice');
   });
 
+  it('Phase 2 patch uses a real AbortController and escapes cart HTML', () => {
+    const src = buildPatchedSource();
+    expect(src).toContain('new AbortController()');
+    expect(src).toContain('controller.signal.aborted');
+    expect(src).toContain('priceAbort.abort()');
+    expect(src).toContain('function escapeHtml');
+    expect(src).toContain('escapeHtml(item.name)');
+    const patch = synthesizePatch('STORAGE_XSS_SPECTER');
+    expect(patch.description).toContain('escape');
+    expect(patch.unifiedDiff).toContain('escapeHtml');
+  });
+
   it('unifiedDiff of identical texts has no hunks', () => {
     const diff = unifiedDiff('a\nb\n', 'a\nb\n', 'x.js', 'y.js');
     expect(diff).toContain('--- a/x.js');
