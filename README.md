@@ -44,8 +44,11 @@ $250. Semua saldo simulasi, bukan uang nyata.
   CDP observer + Exorcist healer + MCP server), server Express Mode A,
   UI split-screen Mode B, skenario 1 Chronos Race Poltergeist end-to-end
   (crash $250 → exorcise → $750 + 0 error). Vitest 48/48, E2E 24/24.
-  Demo: https://fhria5.github.io/possessed-ui/
-- Phase 2 (berikutnya): skenario 2 + 3, guardrail MCP penuh, tab Vault/MCP.
+- **Phase 2 SELESAI + LIVE** (14 Nov 2026): ketiga skenario end-to-end di
+  demo Mode B + CDP sungguhan (Playwright/Chromium nyata — DOM snapshot,
+  stack trace asli, throttling 3G) + MCP penuh + guardrail localhost.
+  Vitest 69/69, E2E 55/55. Demo: https://fhria5.github.io/possessed-ui/
+- Phase 3 (berikutnya): PBT Exorcism 100 run + self-heal + incident lengkap.
 
 ## Struktur
 
@@ -54,14 +57,14 @@ possessed-ui/
 ├── .kiro/                  # specs (EARS) + steering + hooks + settings/mcp.json
 ├── src/
 │   ├── types/possessed.ts  # PossessionReport, ChaosActionStep, …
-│   ├── engine/             # poltergeist-pbt, cdp-observer, exorcist-healer, mcp-server
-│   └── server.ts           # Express Mode A: /api/* + /mcp/*
+│   ├── engine/             # poltergeist-pbt, cdp-observer (Playwright nyata), exorcist-healer, mcp-server, possess-service
+│   └── server.ts           # Express Mode A: /api/* + /mcp/* + /target-app/*
 ├── target-app/
 │   ├── phantom-pay.js          # target rentan (3 bug)
 │   └── phantom-pay.patched.js  # hasil Exorcist (dibuat ulang tiap exorcise)
 ├── public/                 # Mode B dashboard (index.html + styles.css + app.js)
 ├── docs/                   # salinan public/ untuk GitHub Pages (dibuat tiap deploy)
-├── tests/                  # Vitest 48 + Playwright E2E Phase 1
+├── tests/                  # Vitest 69 + Playwright E2E Phase 2 (55 checks)
 ├── SPEK.md                 # blueprint verbatim
 ├── rencana-per-phase.md    # rencana Phase 0–5 + batas jujur
 └── tools/
