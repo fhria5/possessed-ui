@@ -14,13 +14,15 @@ crashes are discovered automatically.
   <50ms apart, network latency injection, storage mutation, and boundary
   form payloads).
 - **1.2** **WHILE** the Poltergeist is active, **THE SYSTEM SHALL** stream
-  real-time cursor coordinates, DOM mutations, intercepted network requests,
-  and console errors to the dashboard.
+  real-time cursor coordinates and console errors to the dashboard, and
+  capture the DOM snapshot plus network timing in the forensics report
+  (live DOM-mutation and network-request streams are not implemented —
+  forensics carry the snapshot and the timing trace instead).
 - **1.3** **IF** a state invariant is violated (e.g., account balance deducted
   twice for a single order, or an unhandled `TypeError` thrown), **THEN THE
   SYSTEM SHALL** halt the possession run, capture the minimal shrunk action
-  sequence, and classify the entity class (`RACE_POLTERGEIST`,
-  `NETWORK_WRAITH`, or `STORAGE_BANSHEE`).
+  sequence, and classify the entity (`Chronos Race Poltergeist`,
+  `Latency Wraith`, or `Storage & XSS Banshee`).
 
 ## Requirement 2: CDP Forensics & Kiro Spec Invariant Diagnostics
 
@@ -42,13 +44,19 @@ the application broke.
 automatically generate and apply a resilient code patch so that the bug is
 fixed and verified without manual debugging.
 
-- **3.1** **WHEN** the user clicks **"Perform Exorcism (Auto-Heal Code)"** or
-  invokes MCP `exorcise_bug`, **THE SYSTEM SHALL** synthesize a targeted code
-  patch (adding idempotency keys, submission locks, null-safe storage parsing,
-  and AbortController guards) and apply it to the target application.
+- **3.1** **WHEN** the user clicks **"PERFORM EXORCISM (SELF-HEAL &
+  RE-VERIFY)"** or invokes MCP `exorcise_and_patch`, **THE SYSTEM SHALL**
+  synthesize a targeted code patch (adding idempotency keys, submission locks,
+  null-safe storage parsing, and AbortController guards) and write it to
+  `target-app/phantom-pay.patched.js` (the vulnerable original is never
+  overwritten).
 - **3.2** **WHEN** a patch is applied, **THE SYSTEM SHALL** automatically
-  re-run the exact minimal counterexample sequence plus 100 `fast-check`
-  property runs to verify 0 crashes and 100% invariant compliance.
+  re-run the possession verification against the patched target (one
+  `possess()` run via `/api/exorcise`, plus a bounded 20-run immunity
+  check when invoked through MCP `exorcise_and_patch`). The full 100
+  `fast-check` runs per scenario are the Phase 3 exorcism runner
+  (`tools/run_exorcism.cjs`, report in `public/exorcism-report.json`), not
+  part of a single exorcise call.
 
 ## Requirement 4: Safety Guardrails & Scope Containment
 
