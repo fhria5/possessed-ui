@@ -4,7 +4,7 @@
 FreshTrack). Pengganti NecroMCP (dibatalkan user 14 Nov 2026).
 
 Repo: https://github.com/fhria5/possessed-ui
-Demo: https://fhria5.github.io/possessed-ui/ (live, Phase 1).
+Demo: https://fhria5.github.io/possessed-ui/ (live, Phase 3).
 
 ## Konsep
 
@@ -48,7 +48,18 @@ $250. Semua saldo simulasi, bukan uang nyata.
   demo Mode B + CDP sungguhan (Playwright/Chromium nyata — DOM snapshot,
   stack trace asli, throttling 3G) + MCP penuh + guardrail localhost.
   Vitest 69/69, E2E 55/55. Demo: https://fhria5.github.io/possessed-ui/
-- Phase 3 (berikutnya): PBT Exorcism 100 run + self-heal + incident lengkap.
+- **Phase 3 SELESAI + LIVE** (14 Nov 2026): PBT Exorcism — 100 run/scenario
+  (seed tetap 20261121/20261122/20261123) dengan arbitrary berbobot-batas
+  menemukan 2 Demon Bug nyata pada patch Phase 1/2: **The 180ms Window
+  Demon** (burst 5 klik [20,46,46,50,48]ms menembus jendela /api/pay →
+  $500,00/2 charge; 7/100 run) dan **The Shape-Shifter Demon** (cart JSON
+  valid tapi bentuk salah — `null`, `{"items": "x"}` — meracuni state.cart;
+  33/100 run). Keduanya di-shrink (5 langkah / 1 langkah), di-Auto-Patch
+  (jendela idempotency 1000ms + validasi bentuk cart), lalu re-verifikasi
+  **100/100 IMMUNE di ketiga skenario**; Network 3G jujur 0/100 tanpa demon.
+  Karantina tool MCP (`exorcise_and_patch` ditolak status `quarantined` bila
+  verifikasi gagal) + Deck Exorcism di UI. Vitest 93/93, E2E 55/55 + 32/32.
+- Phase 4 (berikutnya): polish + uji HP.
 
 ## Struktur
 
@@ -57,19 +68,20 @@ possessed-ui/
 ├── .kiro/                  # specs (EARS) + steering + hooks + settings/mcp.json
 ├── src/
 │   ├── types/possessed.ts  # PossessionReport, ChaosActionStep, …
-│   ├── engine/             # poltergeist-pbt, cdp-observer (Playwright nyata), exorcist-healer, mcp-server, possess-service
+│   ├── engine/             # poltergeist-pbt, cdp-observer (Playwright nyata), exorcist-healer, mcp-server, possess-service, exorcism-pbt (100-run PBT + karantina)
 │   └── server.ts           # Express Mode A: /api/* + /mcp/* + /target-app/*
 ├── target-app/
 │   ├── phantom-pay.js          # target rentan (3 bug)
 │   └── phantom-pay.patched.js  # hasil Exorcist (dibuat ulang tiap exorcise)
 ├── public/                 # Mode B dashboard (index.html + styles.css + app.js)
 ├── docs/                   # salinan public/ untuk GitHub Pages (dibuat tiap deploy)
-├── tests/                  # Vitest 69 + Playwright E2E Phase 2 (55 checks)
+├── tests/                  # Vitest 93 + Playwright E2E Phase 2 (55 checks) + E2E Phase 3 (32 checks)
 ├── SPEK.md                 # blueprint verbatim
 ├── rencana-per-phase.md    # rencana Phase 0–5 + batas jujur
 └── tools/
     ├── create_repo.py      # pembuatan repo + push via GitHub API
     ├── deploy_possessed.py # build + push + Pages
+    ├── run_exorcism.cjs    # 100-run PBT Exorcism: before → Auto-Patch → after + exorcism-report.json
     └── gen_assets.cjs      # patch.diff + kiro-files.json untuk Mode B
 ```
 
