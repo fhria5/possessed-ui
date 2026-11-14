@@ -288,6 +288,14 @@ h2 { font-size: 1rem; margin: 20px 0 8px; color: var(--ectoplasm); }
   margin: 0 auto;
 }
 
+/* Phase 3 — Exorcism Deck */
+.deck-card { border: 1px solid var(--bg-surface); border-radius: 8px; padding: 12px 14px; margin: 12px 0; background: var(--bg-panel); }
+.deck-card h3 { margin: 0 0 6px; font-size: 1rem; color: var(--spectral-violet); }
+.deck-card p { margin: 6px 0; }
+.deck-card ol { margin: 4px 0 8px 20px; font-size: 0.9rem; }
+.deck-card .demon { color: var(--blood-crimson); font-weight: 600; }
+.deck-card .immune { color: var(--ectoplasm); font-weight: 600; }
+
 @media (max-width: 900px) {
   .seance { grid-template-columns: 1fr; }
   .brand-sub { display: block; }
