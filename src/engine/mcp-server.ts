@@ -9,11 +9,67 @@
  */
 import type { PossessionReport, PossessionScenarioId } from '../types/possessed';
 import { exorciseViaServer, possessViaServer } from './possess-service';
+import { verifyImmunity } from './exorcism-pbt';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+
+/** Bounded verification runs inside exorcise_and_patch (the full 100-run
+ *  exorcism is the build-time runner + Vitest; an interactive MCP call
+ *  must stay fast). */
+export const EXORCISE_VERIFY_RUNS = 20;
 
 export interface McpToolDef {
   name: string;
   description: string;
   inputSchema: { type: string; properties: Record<string, unknown>; required: string[] };
+  quarantined?: boolean;
+  quarantineReason?: string;
+}
+
+/** Tool quarantine registry (Phase 3): a patch tool that fails its
+ * verification is quarantined — tools/call rejects it with status
+ * 'quarantined' + reason, and the quarantine is recorded as an incident. */
+export interface QuarantineEntry {
+  tool: string;
+  reason: string;
+  at: string;
+  incidentFile: string;
+}
+
+const quarantine = new Map<string, QuarantineEntry>();
+
+export function quarantineTool(tool: string, reason: string): QuarantineEntry {
+  const root = path.join(__dirname, '..', '..');
+  const dir = path.join(root, '.kiro', 'specs', 'incidents');
+  fs.mkdirSync(dir, { recursive: true });
+  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const incidentFile = path.join(dir, `quarantine-${tool.replace(/_/g, '-')}-${stamp}.json`);
+  const entry: QuarantineEntry = {
+    tool,
+    reason,
+    at: new Date().toISOString(),
+    incidentFile: path.relative(root, incidentFile),
+  };
+  fs.writeFileSync(
+    incidentFile,
+    JSON.stringify({ status: 'QUARANTINED', ...entry }, null, 2) + '\n',
+    'utf8',
+  );
+  quarantine.set(tool, entry);
+  return entry;
+}
+
+export function isQuarantined(tool: string): QuarantineEntry | null {
+  return quarantine.get(tool) ?? null;
+}
+
+export function getQuarantine(): QuarantineEntry[] {
+  return [...quarantine.values()];
+}
+
+/** Test-only escape hatch: lift a quarantine (used by Vitest). */
+export function clearQuarantine(tool: string): void {
+  quarantine.delete(tool);
 }
 
 export const MCP_TOOLS: McpToolDef[] = [
@@ -53,7 +109,10 @@ export const MCP_TOOLS: McpToolDef[] = [
 let lastReport: PossessionReport | null = null;
 
 export function listTools(): McpToolDef[] {
-  return MCP_TOOLS;
+  return MCP_TOOLS.map((t) => {
+    const q = quarantine.get(t.name);
+    return q ? { ...t, quarantined: true, quarantineReason: q.reason } : { ...t, quarantined: false };
+  });
 }
 
 export function getLastReport(): PossessionReport | null {
@@ -71,6 +130,18 @@ export async function callTool(
   args: Record<string, unknown>,
   opts: { baseUrl?: string } = {},
 ): Promise<unknown> {
+  const q = quarantine.get(name);
+  if (q) {
+    const err = new Error(`tool quarantined: ${name} — ${q.reason}`) as Error & {
+      status: string;
+      tool: string;
+      reason: string;
+    };
+    err.status = 'quarantined';
+    err.tool = name;
+    err.reason = q.reason;
+    throw err;
+  }
   if (name === 'possess_target_ui') {
     if (!isScenario(args.scenarioId)) throw new Error(`unknown scenarioId: ${String(args.scenarioId)}`);
     const report = await possessViaServer(args.scenarioId, {
@@ -91,11 +162,30 @@ export async function callTool(
     if (!isScenario(args.scenarioId)) throw new Error(`unknown scenarioId: ${String(args.scenarioId)}`);
     const out = await exorciseViaServer(args.scenarioId);
     lastReport = out.verification;
+    // Bounded post-patch verification: if the patch does not hold, the
+    // tool is quarantined instead of claiming a false immunity.
+    const check = await verifyImmunity(args.scenarioId, { runs: EXORCISE_VERIFY_RUNS });
+    if (check.violations > 0) {
+      const reason = `post-patch verification failed: ${check.violations}/${check.runs} runs still violate the invariant (seed ${check.seed})`;
+      const entry = quarantineTool(name, reason);
+      return {
+        status: 'quarantined',
+        tool: name,
+        reason,
+        incidentFile: entry.incidentFile,
+        patchedFile: out.patchedFile,
+        verification: out.verification,
+      };
+    }
     return {
+      status: 'ok',
+      quarantined: false,
       patchedFile: out.patchedFile,
       incidentFile: out.incidentFile,
       verificationStatus: out.verification.status,
       verification: out.verification,
+      postPatchRuns: check.runs,
+      postPatchViolations: check.violations,
     };
   }
   throw new Error(`unknown tool: ${name}`);
@@ -128,6 +218,18 @@ export async function handleJsonRpc(
     }
     return { jsonrpc: '2.0', id, error: { code: -32601, message: `method not found: ${req.method}` } };
   } catch (e) {
+    const err = e as Error & { status?: string; tool?: string; reason?: string };
+    if (err.status === 'quarantined') {
+      return {
+        jsonrpc: '2.0',
+        id,
+        error: {
+          code: -32099,
+          message: err.message,
+          data: { status: 'quarantined', tool: err.tool, reason: err.reason },
+        },
+      };
+    }
     return { jsonrpc: '2.0', id, error: { code: -32603, message: (e as Error).message } };
   }
 }
