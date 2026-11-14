@@ -46,7 +46,7 @@ async function postJson(url, body) {
 
   // --- Server API ---
   const health = await (await fetch(BASE + 'api/health')).json();
-  check('health mode phase-3', health.mode === 'phase-3');
+  check('health mode phase-4', health.mode === 'phase-4');
   const exorcism = await (await fetch(BASE + 'api/exorcism')).json();
   check('/api/exorcism serves the report', exorcism.phase === 3 && exorcism.runsPerScenario === 100);
   check('/api/exorcism race after 0 violations', exorcism.scenarios.RACE_DOUBLE_CHARGE.after.violations === 0);
@@ -77,7 +77,7 @@ async function postJson(url, body) {
 
   await page.goto(BASE, { waitUntil: 'networkidle' });
   check('demo loads', (await page.title()).includes('Possessed UI'));
-  check('footer Phase 3 marker', (await page.textContent('footer')).includes('Possessed UI Phase 3'));
+  check('footer Phase 4 marker', (await page.textContent('footer')).includes('Possessed UI Phase 4'));
   check('footer honesty line present', (await page.textContent('footer')).includes('not a real CDP browser session'));
 
   await page.click('.tab[data-tab="exorcism"]');
