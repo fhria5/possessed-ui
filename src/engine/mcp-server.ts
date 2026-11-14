@@ -1,21 +1,14 @@
 /**
- * MCP JSON-RPC 2.0 Server (blueprint Task 4, Phase 1 scope).
+ * MCP JSON-RPC 2.0 Server (blueprint Task 4, Phase 2 scope).
  * Tools: possess_target_ui, inspect_cdp_forensics, exorcise_and_patch.
  * Transport here is HTTP (GET /mcp/tools, POST /mcp/call) served by
  * src/server.ts; the stdio transport for Kiro IDE (.kiro/settings/mcp.json)
  * is out of scope until a later phase.
+ * possess_target_ui runs the real-browser CDP capture by default
+ * (args.cdp, default true); pass cdp: false for the fast in-process path.
  */
-import type { PhantomPayInstance, PossessionReport, PossessionScenarioId } from '../types/possessed';
-import { possess } from './poltergeist-pbt';
-import { applyPatch, loadPatched } from './exorcist-healer';
-
-// target-app/phantom-pay.js is plain JS (no types): load via require.
-function freshPhantomPay(): PhantomPayInstance {
-  const mod = require('../../target-app/phantom-pay.js') as {
-    createPhantomPay: () => PhantomPayInstance;
-  };
-  return mod.createPhantomPay();
-}
+import type { PossessionReport, PossessionScenarioId } from '../types/possessed';
+import { exorciseViaServer, possessViaServer } from './possess-service';
 
 export interface McpToolDef {
   name: string;
@@ -31,7 +24,10 @@ export const MCP_TOOLS: McpToolDef[] = [
       type: 'object',
       properties: {
         scenarioId: { type: 'string', enum: ['RACE_DOUBLE_CHARGE', 'NETWORK_3G_CHAOS', 'STORAGE_XSS_SPECTER'] },
-        seed: { type: 'number', description: 'Deterministic fast-check seed (default 20261114).' },
+        seed: { type: 'number', description: 'Deterministic fast-check seed (default 20261121).' },
+        cdp: { type: 'boolean', description: 'Real Chromium CDP forensics (default true); false = fast in-process path.' },
+        patched: { type: 'boolean', description: 'Run against the Exorcist-patched target (default false).' },
+        targetUrl: { type: 'string', description: 'Optional explicit target URL — must be localhost/127.0.0.1 (scope guardrail).' },
       },
       required: ['scenarioId'],
     },
@@ -70,12 +66,19 @@ function isScenario(value: unknown): value is PossessionScenarioId {
   );
 }
 
-export async function callTool(name: string, args: Record<string, unknown>): Promise<unknown> {
+export async function callTool(
+  name: string,
+  args: Record<string, unknown>,
+  opts: { baseUrl?: string } = {},
+): Promise<unknown> {
   if (name === 'possess_target_ui') {
     if (!isScenario(args.scenarioId)) throw new Error(`unknown scenarioId: ${String(args.scenarioId)}`);
-    const instance: PhantomPayInstance = freshPhantomPay();
-    const report = await possess(instance, args.scenarioId, {
+    const report = await possessViaServer(args.scenarioId, {
       seed: typeof args.seed === 'number' ? args.seed : undefined,
+      cdp: typeof args.cdp === 'boolean' ? args.cdp : undefined,
+      patched: args.patched === true,
+      targetUrl: typeof args.targetUrl === 'string' ? args.targetUrl : undefined,
+      baseUrl: opts.baseUrl,
     });
     lastReport = report;
     return report;
@@ -86,15 +89,13 @@ export async function callTool(name: string, args: Record<string, unknown>): Pro
   }
   if (name === 'exorcise_and_patch') {
     if (!isScenario(args.scenarioId)) throw new Error(`unknown scenarioId: ${String(args.scenarioId)}`);
-    const applied = applyPatch(args.scenarioId);
-    const patched = loadPatched();
-    const verification = await possess(patched, args.scenarioId, {});
-    lastReport = verification;
+    const out = await exorciseViaServer(args.scenarioId);
+    lastReport = out.verification;
     return {
-      patchedFile: applied.patchedFile,
-      incidentFile: applied.incidentFile,
-      verificationStatus: verification.status,
-      verification,
+      patchedFile: out.patchedFile,
+      incidentFile: out.incidentFile,
+      verificationStatus: out.verification.status,
+      verification: out.verification,
     };
   }
   throw new Error(`unknown tool: ${name}`);
@@ -107,7 +108,10 @@ export interface JsonRpcRequest {
   params?: { name?: string; arguments?: Record<string, unknown> };
 }
 
-export async function handleJsonRpc(req: JsonRpcRequest): Promise<Record<string, unknown>> {
+export async function handleJsonRpc(
+  req: JsonRpcRequest,
+  opts: { baseUrl?: string } = {},
+): Promise<Record<string, unknown>> {
   const id = req.id ?? null;
   try {
     if (req.method === 'tools/list') {
@@ -115,7 +119,7 @@ export async function handleJsonRpc(req: JsonRpcRequest): Promise<Record<string,
     }
     if (req.method === 'tools/call') {
       const name = req.params?.name ?? '';
-      const result = await callTool(name, req.params?.arguments ?? {});
+      const result = await callTool(name, req.params?.arguments ?? {}, opts);
       return {
         jsonrpc: '2.0',
         id,
