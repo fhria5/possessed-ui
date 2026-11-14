@@ -1,17 +1,20 @@
 /**
- * Possessed UI — Mode A local server (Express), Phase 2.
+ * Possessed UI — Mode A local server (Express), Phase 3.
  * Serves the Mode B dashboard (public/) and the JSON/MCP API.
  * All 3 scenarios are live. /api/possess returns REAL Chromium forensics
  * by default (cdp: true → captureBrowserPossession); pass cdp: false for
  * the fast in-process path. The scope guardrail rejects non-localhost
  * targetUrl values before any browser is launched.
+ * Phase 3: /api/exorcism serves the precomputed 100-run PBT Exorcism
+ * report (public/exorcism-report.json); /api/quarantine lists quarantined
+ * MCP tools.
  */
 import express from 'express';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import type { PossessionScenarioId } from './types/possessed';
 import { exorciseViaServer, possessViaServer, resolveBaseUrl } from './engine/possess-service';
-import { callTool, getLastReport, handleJsonRpc, listTools } from './engine/mcp-server';
+import { callTool, getLastReport, getQuarantine, handleJsonRpc, listTools } from './engine/mcp-server';
 
 export const PORT = Number(process.env.PORT ?? 8933);
 export const ALL_SCENARIOS: PossessionScenarioId[] = [
@@ -53,13 +56,29 @@ export function createApp(): express.Express {
   app.get('/api/health', (_req, res) => {
     res.json({
       ok: true,
-      mode: 'phase-2',
+      mode: 'phase-3',
       engine: 'ready',
       mcp: true,
       cdp: cdpStatus(),
       scenarios: ALL_SCENARIOS,
       note: 'Mode B demo is a static browser simulation, not a real CDP session. /api/possess forensics come from a real Chromium session unless cdp:false.',
     });
+  });
+
+  // Phase 3: precomputed 100-run PBT Exorcism report (generated at build
+  // time by tools/run_exorcism.cjs — real numbers, fixed seeds).
+  app.get('/api/exorcism', (_req, res) => {
+    const reportPath = path.join(__dirname, '..', 'public', 'exorcism-report.json');
+    if (!fs.existsSync(reportPath)) {
+      res.status(404).json({ available: false, error: 'exorcism report not generated yet — run tools/run_exorcism.cjs' });
+      return;
+    }
+    res.json(JSON.parse(fs.readFileSync(reportPath, 'utf8')));
+  });
+
+  // Phase 3: quarantined MCP tools (empty when every patch holds).
+  app.get('/api/quarantine', (_req, res) => {
+    res.json({ quarantined: getQuarantine() });
   });
 
   app.post('/api/possess', async (req, res) => {
@@ -151,7 +170,7 @@ if (require.main === module) {
   const app = createApp();
   app.listen(PORT, () => {
     // eslint-disable-next-line no-console
-    console.log(`Possessed UI Phase 2 listening on http://localhost:${PORT}`);
+    console.log(`Possessed UI Phase 3 listening on http://localhost:${PORT}`);
   });
 }
 
