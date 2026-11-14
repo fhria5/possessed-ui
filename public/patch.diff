@@ -1,0 +1,66 @@
+--- a/target-app/phantom-pay.js
++++ b/target-app/phantom-pay.patched.js
+@@ -1,3 +1,5 @@
++// EXORCISED — patched by Possessed UI Exorcist (inFlightLock + idempotencyKey
++// + stale-response guard + safe storage fallback). Generated from target-app/phantom-pay.js — the vulnerable original is never overwritten.
+ /**
+  * PhantomPay One-Click Checkout — VULNERABLE target app (Phase 0 artifact).
+  *
+@@ -48,14 +50,19 @@
+     cart: null,
+   };
+ 
+-  // BUG 3: tanpa try/catch — cart rusak = SyntaxError tak tertangkap.
++  // EXORCISED: safe deserialization — corrupted cart falls back.
+   function loadCart() {
+     const raw = storage().getItem('phantom_cart');
+     if (raw === null) {
+       state.cart = { items: [] };
+       return state.cart;
+     }
+-    state.cart = JSON.parse(raw);
++    try {
++      state.cart = JSON.parse(raw);
++    } catch (err) {
++      state.consoleErrors.push('Storage parse failed, fell back to empty cart: ' + err.message);
++      state.cart = { items: [] };
++    }
+     return state.cart;
+   }
+ 
+@@ -75,22 +82,29 @@
+     });
+   }
+ 
+-  // BUG 1: tanpa inFlightLock dan tanpa idempotencyKey — klik beruntun
+-  // masing-masing memicu payApi sendiri.
++  // EXORCISED: idempotency lock — concurrent clicks share one charge.
++  let inFlightCheckout = null;
+   async function handleCheckout() {
+-    const charge = await payApi(ITEM_PRICE_CENTS);
++    if (inFlightCheckout) return inFlightCheckout;
++    const idempotencyKey = 'idem_' + Date.now() + '_' + Math.floor(Math.random() * 1e6);
++    inFlightCheckout = payApi(ITEM_PRICE_CENTS).finally(() => { inFlightCheckout = null; });
++    const charge = await inFlightCheckout;
++    charge.idempotencyKey = idempotencyKey;
++    state.lastIdempotencyKey = idempotencyKey;
+     return charge;
+   }
+ 
+-  // BUG 2: tanpa AbortController — fetch lama yang selesai belakangan
+-  // menimpa harga terbaru.
++  // EXORCISED: stale-response guard — superseded requests are ignored.
+   let latestPriceRequest = 0;
+   function fetchPrice(currency, discountCode) {
+     const requestId = ++latestPriceRequest;
+     const delay = 60 + Math.floor(Math.random() * 240); // 60–300ms acak
+     return new Promise((resolve) => {
+       setTimeout(() => {
+-        void requestId; // requestId sengaja tidak dipakai untuk membatalkan
++        if (requestId !== latestPriceRequest) {
++          resolve({ priceCents: state.displayedPriceCents, currency: state.currency, discountCode: state.discountCode, stale: true });
++          return;
++        }
+         let price = ITEM_PRICE_CENTS;
+         if (discountCode === 'GHOST10') price = Math.round(price * 0.9);
+         if (currency === 'EUR') price = Math.round(price * 0.92);
