@@ -56,7 +56,7 @@ export function createApp(): express.Express {
   app.get('/api/health', (_req, res) => {
     res.json({
       ok: true,
-      mode: 'phase-3',
+      mode: 'phase-4',
       engine: 'ready',
       mcp: true,
       cdp: cdpStatus(),
@@ -170,7 +170,7 @@ if (require.main === module) {
   const app = createApp();
   app.listen(PORT, () => {
     // eslint-disable-next-line no-console
-    console.log(`Possessed UI Phase 3 listening on http://localhost:${PORT}`);
+    console.log(`Possessed UI Phase 4 listening on http://localhost:${PORT}`);
   });
 }
 
