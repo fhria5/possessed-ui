@@ -1,1 +1,1 @@
-{"mcpServers":{"possessed-ui-exorcist":{"args":["tsx","src/engine/mcp-stdio.ts"],"autoApprove":["possess_target_ui","inspect_cdp_forensics"],"command":"npx","disabled":false,"env":{"POSSESSED_PBT_RUNS":"100","POSSESSED_SCOPE_ALLOWLIST":"localhost,127.0.0.1"}}}}
+{"mcpServers":{"possessed-ui-exorcist":{"args":["dist/engine/mcp-stdio.js"],"autoApprove":["possess_target_ui","inspect_cdp_forensics"],"command":"node","disabled":false,"env":{"POSSESSED_BASE_URL":"http://127.0.0.1:8933"}}}}
