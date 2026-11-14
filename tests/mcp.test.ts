@@ -24,6 +24,7 @@ describe('callTool', () => {
   it('possess_target_ui reproduces the race and stores the report', async () => {
     const report = (await callTool('possess_target_ui', {
       scenarioId: 'RACE_DOUBLE_CHARGE',
+      cdp: false,
     })) as PossessionReport;
     expect(report.status).toBe('POSSESSED_CRASH');
     expect(report.shrunkActionSequence).toHaveLength(3);
@@ -31,13 +32,22 @@ describe('callTool', () => {
   });
 
   it('inspect_cdp_forensics returns the last run forensics', async () => {
-    await callTool('possess_target_ui', { scenarioId: 'RACE_DOUBLE_CHARGE' });
+    await callTool('possess_target_ui', { scenarioId: 'RACE_DOUBLE_CHARGE', cdp: false });
     const forensics = (await callTool('inspect_cdp_forensics', {})) as {
       targetFile: string;
       stateCorruptionDetail: string;
     };
     expect(forensics.targetFile).toBe('target-app/phantom-pay.js');
     expect(forensics.stateCorruptionDetail).toContain('$250.00');
+  });
+
+  it('possess_target_ui rejects an external targetUrl (guardrail)', async () => {
+    await expect(
+      callTool('possess_target_ui', {
+        scenarioId: 'RACE_DOUBLE_CHARGE',
+        targetUrl: 'https://example.com/',
+      }),
+    ).rejects.toThrow('guardrail');
   });
 
   it('exorcise_and_patch heals and re-verifies to IMMUNE', async () => {
@@ -74,7 +84,7 @@ describe('handleJsonRpc', () => {
       jsonrpc: '2.0',
       id: 'abc',
       method: 'tools/call',
-      params: { name: 'possess_target_ui', arguments: { scenarioId: 'RACE_DOUBLE_CHARGE' } },
+      params: { name: 'possess_target_ui', arguments: { scenarioId: 'RACE_DOUBLE_CHARGE', cdp: false } },
     });
     expect(res.jsonrpc).toBe('2.0');
     const result = res.result as { content: Array<{ type: string; text: string }> };
