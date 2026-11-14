@@ -1,0 +1,297 @@
+{
+  "phase": 3,
+  "generatedAt": "2026-11-14T15:01:35.645Z",
+  "seedBase": 20261121,
+  "runsPerScenario": 100,
+  "scenarios": {
+    "RACE_DOUBLE_CHARGE": {
+      "seed": 20261121,
+      "before": {
+        "scenarioId": "RACE_DOUBLE_CHARGE",
+        "seed": 20261121,
+        "runs": 100,
+        "violations": 7,
+        "status": "DEMON_FOUND",
+        "firstViolation": {
+          "input": [
+            {
+              "actionType": "CLICK",
+              "selector": "#pay-button",
+              "delayMs": 20,
+              "cursorX": 606,
+              "cursorY": 311,
+              "stepIndex": 0
+            },
+            {
+              "actionType": "CLICK",
+              "selector": "#pay-button",
+              "delayMs": 46,
+              "cursorX": 661,
+              "cursorY": 359,
+              "stepIndex": 1
+            },
+            {
+              "actionType": "CLICK",
+              "selector": "#pay-button",
+              "delayMs": 46,
+              "cursorX": 748,
+              "cursorY": 303,
+              "stepIndex": 2
+            },
+            {
+              "actionType": "CLICK",
+              "selector": "#pay-button",
+              "delayMs": 50,
+              "cursorX": 649,
+              "cursorY": 396,
+              "stepIndex": 3
+            },
+            {
+              "actionType": "CLICK",
+              "selector": "#pay-button",
+              "delayMs": 48,
+              "cursorX": 755,
+              "cursorY": 302,
+              "stepIndex": 4
+            }
+          ],
+          "observed": {
+            "balanceCents": 50000,
+            "charges": 2,
+            "threw": false,
+            "detail": "Expected Balance: $750.00 | Actual: $500.00 (2 charge(s), double charge!)"
+          }
+        }
+      },
+      "demonBug": {
+        "name": "The 180ms Window Demon",
+        "scenarioId": "RACE_DOUBLE_CHARGE",
+        "input": [
+          {
+            "actionType": "CLICK",
+            "selector": "#pay-button",
+            "delayMs": 20,
+            "cursorX": 606,
+            "cursorY": 311,
+            "stepIndex": 0
+          },
+          {
+            "actionType": "CLICK",
+            "selector": "#pay-button",
+            "delayMs": 46,
+            "cursorX": 661,
+            "cursorY": 359,
+            "stepIndex": 1
+          },
+          {
+            "actionType": "CLICK",
+            "selector": "#pay-button",
+            "delayMs": 46,
+            "cursorX": 748,
+            "cursorY": 303,
+            "stepIndex": 2
+          },
+          {
+            "actionType": "CLICK",
+            "selector": "#pay-button",
+            "delayMs": 50,
+            "cursorX": 649,
+            "cursorY": 396,
+            "stepIndex": 3
+          },
+          {
+            "actionType": "CLICK",
+            "selector": "#pay-button",
+            "delayMs": 48,
+            "cursorX": 755,
+            "cursorY": 302,
+            "stepIndex": 4
+          }
+        ],
+        "observed": {
+          "balanceCents": 50000,
+          "charges": 2,
+          "threw": false,
+          "detail": "Expected Balance: $750.00 | Actual: $500.00 (2 charge(s), double charge!)"
+        },
+        "shrunkSequence": [
+          {
+            "actionType": "CLICK",
+            "selector": "#pay-button",
+            "delayMs": 20,
+            "cursorX": 606,
+            "cursorY": 311,
+            "stepIndex": 0
+          },
+          {
+            "actionType": "CLICK",
+            "selector": "#pay-button",
+            "delayMs": 46,
+            "cursorX": 661,
+            "cursorY": 359,
+            "stepIndex": 1
+          },
+          {
+            "actionType": "CLICK",
+            "selector": "#pay-button",
+            "delayMs": 46,
+            "cursorX": 748,
+            "cursorY": 303,
+            "stepIndex": 2
+          },
+          {
+            "actionType": "CLICK",
+            "selector": "#pay-button",
+            "delayMs": 50,
+            "cursorX": 649,
+            "cursorY": 396,
+            "stepIndex": 3
+          },
+          {
+            "actionType": "CLICK",
+            "selector": "#pay-button",
+            "delayMs": 48,
+            "cursorX": 755,
+            "cursorY": 302,
+            "stepIndex": 4
+          }
+        ],
+        "shrinkSteps": 5,
+        "patch": "Idempotency grace window: handleCheckout() keeps the last charge for 1000ms after it settles; any click inside the window returns the SAME charge instead of starting a second /api/pay call (exorcist-healer.ts CHECKOUT_NEW)."
+      },
+      "after": {
+        "scenarioId": "RACE_DOUBLE_CHARGE",
+        "seed": 20261121,
+        "runs": 100,
+        "violations": 0,
+        "status": "IMMUNE_100_100",
+        "firstViolation": null
+      }
+    },
+    "NETWORK_3G_CHAOS": {
+      "seed": 20261122,
+      "before": {
+        "scenarioId": "NETWORK_3G_CHAOS",
+        "seed": 20261122,
+        "runs": 100,
+        "violations": 0,
+        "status": "IMMUNE_100_100",
+        "firstViolation": null
+      },
+      "demonBug": null,
+      "after": {
+        "scenarioId": "NETWORK_3G_CHAOS",
+        "seed": 20261122,
+        "runs": 100,
+        "violations": 0,
+        "status": "IMMUNE_100_100",
+        "firstViolation": null
+      }
+    },
+    "STORAGE_XSS_SPECTER": {
+      "seed": 20261123,
+      "before": {
+        "scenarioId": "STORAGE_XSS_SPECTER",
+        "seed": 20261123,
+        "runs": 100,
+        "violations": 33,
+        "status": "DEMON_FOUND",
+        "firstViolation": {
+          "input": [
+            {
+              "actionType": "CORRUPT_STORAGE",
+              "payload": "{\"items\": null}",
+              "delayMs": 4,
+              "cursorX": 564,
+              "cursorY": 358,
+              "stepIndex": 0
+            },
+            {
+              "actionType": "CORRUPT_STORAGE",
+              "payload": "null",
+              "delayMs": 42,
+              "cursorX": 561,
+              "cursorY": 300,
+              "stepIndex": 1
+            },
+            {
+              "stepIndex": 2,
+              "actionType": "CLICK",
+              "selector": "#reload-cart",
+              "delayMs": 0,
+              "cursorX": 600,
+              "cursorY": 340
+            }
+          ],
+          "observed": {
+            "balanceCents": 100000,
+            "charges": 0,
+            "threw": false,
+            "detail": "loadCart() left a poisoned cart: state.cart = null (expected { items: [...] }) — any cart.items access downstream would throw.",
+            "cartJson": "null"
+          }
+        }
+      },
+      "demonBug": {
+        "name": "The Shape-Shifter Demon",
+        "scenarioId": "STORAGE_XSS_SPECTER",
+        "input": [
+          {
+            "actionType": "CORRUPT_STORAGE",
+            "payload": "{\"items\": null}",
+            "delayMs": 4,
+            "cursorX": 564,
+            "cursorY": 358,
+            "stepIndex": 0
+          },
+          {
+            "actionType": "CORRUPT_STORAGE",
+            "payload": "null",
+            "delayMs": 42,
+            "cursorX": 561,
+            "cursorY": 300,
+            "stepIndex": 1
+          },
+          {
+            "stepIndex": 2,
+            "actionType": "CLICK",
+            "selector": "#reload-cart",
+            "delayMs": 0,
+            "cursorX": 600,
+            "cursorY": 340
+          }
+        ],
+        "observed": {
+          "balanceCents": 100000,
+          "charges": 0,
+          "threw": false,
+          "detail": "loadCart() left a poisoned cart: state.cart = null (expected { items: [...] }) — any cart.items access downstream would throw.",
+          "cartJson": "null"
+        },
+        "shrunkSequence": [
+          {
+            "actionType": "CORRUPT_STORAGE",
+            "payload": "null",
+            "delayMs": 42,
+            "cursorX": 561,
+            "cursorY": 300,
+            "stepIndex": 0
+          }
+        ],
+        "shrinkSteps": 3,
+        "patch": "Cart shape validation: loadCart() now requires the parsed value to be { items: [...] } and falls back to an empty cart otherwise (exorcist-healer.ts LOAD_CART_NEW)."
+      },
+      "after": {
+        "scenarioId": "STORAGE_XSS_SPECTER",
+        "seed": 20261123,
+        "runs": 100,
+        "violations": 0,
+        "status": "IMMUNE_100_100",
+        "firstViolation": null
+      }
+    }
+  },
+  "quarantine": {
+    "quarantined": false
+  }
+}
