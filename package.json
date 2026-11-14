@@ -20,6 +20,7 @@
     "dev": "node dist/server.js",
     "start": "node dist/server.js",
     "test": "vitest run",
+    "test:pbt": "vitest run tests/poltergeist.test.ts tests/exorcism.test.ts",
     "e2e": "node tests/e2e-phase2.cjs"
   },
   "version": "0.1.0"
