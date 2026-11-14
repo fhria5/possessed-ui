@@ -17,6 +17,30 @@
       "content": ""
     },
     {
+      "path": "specs/incidents/network_3g_chaos-2026-11-14T14-32-20-631Z.json",
+      "content": "{\n  \"scenarioId\": \"NETWORK_3G_CHAOS\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add an AbortController + request-token guard to fetchPrice(): a superseded request is aborted and its late response ignored instead of overwriting the latest price.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:32:20.631Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/network_3g_chaos-2026-11-14T14-32-25-013Z.json",
+      "content": "{\n  \"scenarioId\": \"NETWORK_3G_CHAOS\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add an AbortController + request-token guard to fetchPrice(): a superseded request is aborted and its late response ignored instead of overwriting the latest price.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:32:25.013Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/network_3g_chaos-2026-11-14T14-35-06-477Z.json",
+      "content": "{\n  \"scenarioId\": \"NETWORK_3G_CHAOS\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add an AbortController + request-token guard to fetchPrice(): a superseded request is aborted and its late response ignored instead of overwriting the latest price.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:35:06.477Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/network_3g_chaos-2026-11-14T14-35-10-530Z.json",
+      "content": "{\n  \"scenarioId\": \"NETWORK_3G_CHAOS\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add an AbortController + request-token guard to fetchPrice(): a superseded request is aborted and its late response ignored instead of overwriting the latest price.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:35:10.531Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/network_3g_chaos-2026-11-14T14-35-44-252Z.json",
+      "content": "{\n  \"scenarioId\": \"NETWORK_3G_CHAOS\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add an AbortController + request-token guard to fetchPrice(): a superseded request is aborted and its late response ignored instead of overwriting the latest price.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:35:44.252Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/network_3g_chaos-2026-11-14T14-36-24-979Z.json",
+      "content": "{\n  \"scenarioId\": \"NETWORK_3G_CHAOS\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add an AbortController + request-token guard to fetchPrice(): a superseded request is aborted and its late response ignored instead of overwriting the latest price.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:36:24.979Z\"\n}\n"
+    },
+    {
       "path": "specs/incidents/race_double_charge-2026-11-14T14-03-34-314Z.json",
       "content": "{\n  \"scenarioId\": \"RACE_DOUBLE_CHARGE\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add inFlightLock + idempotencyKey to handleCheckout(): concurrent clicks share one /api/pay call, so a triple-click charges exactly once.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:03:34.315Z\"\n}\n"
     },
@@ -73,6 +97,86 @@
       "content": "{\n  \"scenarioId\": \"RACE_DOUBLE_CHARGE\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add inFlightLock + idempotencyKey to handleCheckout(): concurrent clicks share one /api/pay call, so a triple-click charges exactly once.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:09:08.804Z\"\n}\n"
     },
     {
+      "path": "specs/incidents/race_double_charge-2026-11-14T14-09-55-738Z.json",
+      "content": "{\n  \"scenarioId\": \"RACE_DOUBLE_CHARGE\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add inFlightLock + idempotencyKey to handleCheckout(): concurrent clicks share one /api/pay call, so a triple-click charges exactly once.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:09:55.738Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/race_double_charge-2026-11-14T14-28-16-933Z.json",
+      "content": "{\n  \"scenarioId\": \"RACE_DOUBLE_CHARGE\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add inFlightLock + idempotencyKey to handleCheckout(): concurrent clicks share one /api/pay call, so a triple-click charges exactly once.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:28:16.933Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/race_double_charge-2026-11-14T14-28-20-389Z.json",
+      "content": "{\n  \"scenarioId\": \"RACE_DOUBLE_CHARGE\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add inFlightLock + idempotencyKey to handleCheckout(): concurrent clicks share one /api/pay call, so a triple-click charges exactly once.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:28:20.390Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/race_double_charge-2026-11-14T14-28-21-278Z.json",
+      "content": "{\n  \"scenarioId\": \"RACE_DOUBLE_CHARGE\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add inFlightLock + idempotencyKey to handleCheckout(): concurrent clicks share one /api/pay call, so a triple-click charges exactly once.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:28:21.279Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/race_double_charge-2026-11-14T14-28-22-130Z.json",
+      "content": "{\n  \"scenarioId\": \"RACE_DOUBLE_CHARGE\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add inFlightLock + idempotencyKey to handleCheckout(): concurrent clicks share one /api/pay call, so a triple-click charges exactly once.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:28:22.131Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/race_double_charge-2026-11-14T14-28-22-139Z.json",
+      "content": "{\n  \"scenarioId\": \"RACE_DOUBLE_CHARGE\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add inFlightLock + idempotencyKey to handleCheckout(): concurrent clicks share one /api/pay call, so a triple-click charges exactly once.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:28:22.139Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/race_double_charge-2026-11-14T14-32-19-456Z.json",
+      "content": "{\n  \"scenarioId\": \"RACE_DOUBLE_CHARGE\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add inFlightLock + idempotencyKey to handleCheckout(): concurrent clicks share one /api/pay call, so a triple-click charges exactly once.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:32:19.457Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/race_double_charge-2026-11-14T14-32-20-343Z.json",
+      "content": "{\n  \"scenarioId\": \"RACE_DOUBLE_CHARGE\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add inFlightLock + idempotencyKey to handleCheckout(): concurrent clicks share one /api/pay call, so a triple-click charges exactly once.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:32:20.343Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/race_double_charge-2026-11-14T14-32-21-564Z.json",
+      "content": "{\n  \"scenarioId\": \"RACE_DOUBLE_CHARGE\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add inFlightLock + idempotencyKey to handleCheckout(): concurrent clicks share one /api/pay call, so a triple-click charges exactly once.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:32:21.564Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/race_double_charge-2026-11-14T14-32-21-575Z.json",
+      "content": "{\n  \"scenarioId\": \"RACE_DOUBLE_CHARGE\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add inFlightLock + idempotencyKey to handleCheckout(): concurrent clicks share one /api/pay call, so a triple-click charges exactly once.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:32:21.575Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/race_double_charge-2026-11-14T14-35-06-184Z.json",
+      "content": "{\n  \"scenarioId\": \"RACE_DOUBLE_CHARGE\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add inFlightLock + idempotencyKey to handleCheckout(): concurrent clicks share one /api/pay call, so a triple-click charges exactly once.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:35:06.184Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/race_double_charge-2026-11-14T14-35-16-550Z.json",
+      "content": "{\n  \"scenarioId\": \"RACE_DOUBLE_CHARGE\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add inFlightLock + idempotencyKey to handleCheckout(): concurrent clicks share one /api/pay call, so a triple-click charges exactly once.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:35:16.551Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/race_double_charge-2026-11-14T14-35-16-864Z.json",
+      "content": "{\n  \"scenarioId\": \"RACE_DOUBLE_CHARGE\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add inFlightLock + idempotencyKey to handleCheckout(): concurrent clicks share one /api/pay call, so a triple-click charges exactly once.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:35:16.864Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/race_double_charge-2026-11-14T14-35-16-880Z.json",
+      "content": "{\n  \"scenarioId\": \"RACE_DOUBLE_CHARGE\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add inFlightLock + idempotencyKey to handleCheckout(): concurrent clicks share one /api/pay call, so a triple-click charges exactly once.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:35:16.880Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/race_double_charge-2026-11-14T14-35-43-965Z.json",
+      "content": "{\n  \"scenarioId\": \"RACE_DOUBLE_CHARGE\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add inFlightLock + idempotencyKey to handleCheckout(): concurrent clicks share one /api/pay call, so a triple-click charges exactly once.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:35:43.965Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/race_double_charge-2026-11-14T14-36-24-694Z.json",
+      "content": "{\n  \"scenarioId\": \"RACE_DOUBLE_CHARGE\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Add inFlightLock + idempotencyKey to handleCheckout(): concurrent clicks share one /api/pay call, so a triple-click charges exactly once.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:36:24.694Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/storage_xss_specter-2026-11-14T14-32-23-636Z.json",
+      "content": "{\n  \"scenarioId\": \"STORAGE_XSS_SPECTER\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Wrap JSON.parse in loadCart() with try/catch and escape cart item names in cartItemHtml(): a corrupted cart falls back to an empty cart and an XSS payload renders as inert text instead of executing.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:32:23.636Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/storage_xss_specter-2026-11-14T14-35-09-069Z.json",
+      "content": "{\n  \"scenarioId\": \"STORAGE_XSS_SPECTER\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Wrap JSON.parse in loadCart() with try/catch and escape cart item names in cartItemHtml(): a corrupted cart falls back to an empty cart and an XSS payload renders as inert text instead of executing.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:35:09.069Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/storage_xss_specter-2026-11-14T14-35-46-921Z.json",
+      "content": "{\n  \"scenarioId\": \"STORAGE_XSS_SPECTER\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Wrap JSON.parse in loadCart() with try/catch and escape cart item names in cartItemHtml(): a corrupted cart falls back to an empty cart and an XSS payload renders as inert text instead of executing.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:35:46.921Z\"\n}\n"
+    },
+    {
+      "path": "specs/incidents/storage_xss_specter-2026-11-14T14-36-27-416Z.json",
+      "content": "{\n  \"scenarioId\": \"STORAGE_XSS_SPECTER\",\n  \"status\": \"EXORCISED\",\n  \"description\": \"Wrap JSON.parse in loadCart() with try/catch and escape cart item names in cartItemHtml(): a corrupted cart falls back to an empty cart and an XSS payload renders as inert text instead of executing.\",\n  \"patchedFile\": \"target-app/phantom-pay.patched.js\",\n  \"resolvedAt\": \"2026-11-14T14:36:27.416Z\"\n}\n"
+    },
+    {
       "path": "specs/possessed-engine/design.md",
       "content": "# Design — Possessed UI Engine\n\nSumber: Part 2 blueprint (`SPEK.md`).\n\n## High-Level Architecture\n\n```text\n+-----------------------------------------------------------------------------------+\n|                  THE EXORCIST'S SEANCE CONSOLE (Split-Screen UI)                  |\n|                                                                                   |\n|  [LEFT: Exorcist Control & Telemetry]   |   [RIGHT: Haunted Target App Sandbox]   |\n|  - 3 One-Click Possession Presets       |   - Live PhantomPay Checkout App        |\n|  - Live PBT Action Stream & Shrinker    |   - Animated Spectral Ghost Cursor      |\n|  - EARS Invariant & Diff Patch Viewer   |   - Real Balance / Cart / Console State |\n+-------------------+---------------------+---------------------+-------------------+\n                    |                                           ^\n                    v                                           | (CDP / PostMessage)\n+-----------------------------------------------------------------------------------+\n|                      POSSESSED UI CORE ENGINE (Node.js / TS)                      |\n|                                                                                   |\n|  1. Poltergeist Chaos Engine       2. CDP & DOM Medium       3. Exorcist Healer   |\n|  - fast-check Action Arbitraries   - Console/Network Hook    - AST/Line Patcher   |\n|  - Race Condition / Latency Chaos  - Invariant Checker       - Auto-Regression    |\n|                                                                                   |\n|  4. MCP JSON-RPC 2.0 Server (tools/list, tools/call)         5. Scope Guardrail   |\n+-----------------------------------------------------------------------------------+\n```\n\n## Core TypeScript Data Models (`src/types/possessed.ts`)\n\n```typescript\nexport type PossessionScenarioId =\n  | 'RACE_DOUBLE_CHARGE'\n  | 'NETWORK_3G_CHAOS'\n  | 'STORAGE_XSS_SPECTER';\n\nexport interface ChaosActionStep {\n  stepIndex: number;\n  actionType: 'CLICK' | 'TYPE' | 'THROTTLE_NETWORK' | 'CORRUPT_STORAGE' | 'ABORT_FETCH';\n  selector?: string;\n  payload?: string;\n  delayMs: number;\n  cursorX: number;\n  cursorY: number;\n}\n\nexport interface PossessionReport {\n  sessionId: string;\n  scenarioId: PossessionScenarioId;\n  entityName: string;          // e.g., \"Chronos Race Poltergeist\"\n  status: 'POSSESSED_CRASH' | 'EXORCISED_IMMUNE';\n  pbtRunsExecuted: number;\n  invariantViolated: string;\n  shrunkActionSequence: ChaosActionStep[];\n  shrinkSteps: number;\n  forensics: {\n    targetFile: string;\n    lineNumber: number;\n    consoleError: string;\n    stateCorruptionDetail: string; // e.g., \"Expected Balance: $750.00 | Actual: $500.00 (Double Charge!)\"\n  };\n  proposedPatch: {\n    description: string;\n    unifiedDiff: string;\n    patchedCode: string;\n  };\n}\n```\n\n## Built-In Vulnerable Target App (`target-app/phantom-pay.js`)\n\nPhantomPay One-Click Checkout. Saldo awal **$1.000,00**, beli **Cursed Relic\n$250,00**. Semua saldo simulasi, bukan uang nyata.\n\nUnpatched vulnerable logic:\n\n1. *Double-Click Race Bug:* `handleCheckout()` does not disable the button or\n   attach an `idempotencyKey` while awaiting the async `/api/pay` request\n   (which takes 180ms). Clicking 3 times in 40ms deducts `$250.00` three\n   times → Balance drops to **`$250.00`** instead of **`$750.00`**!\n2. *Network Out-of-Order Bug:* Rapidly switching currency/discount codes\n   triggers overlapping fetches where a slow stale response overwrites a newer\n   response.\n3. *Storage Corruption Bug:* Reading `JSON.parse(localStorage.getItem('phantom_cart'))`\n   without a `try/catch` throws an uncaught `SyntaxError` and blanks the UI\n   when corrupted by the Storage Banshee.\n\nSelf-healed (exorcised) logic: clicking **Perform Exorcism (Apply Auto-Patch)**\ninjects an `inFlightLock` + `idempotencyKey` + `AbortController` + safe\n`try/catch` storage fallback into the target app, and immediately re-runs the\nPoltergeist attack to show **`$750.00` exact balance** and **`0 Console Errors`**.\n\n## Backend HTTP & MCP API Specification\n\n- `GET /api/health` — server status, CDP availability, Kiro `.kiro/` sync status.\n- `POST /api/possess` — body: `{ scenarioId, isPatched, targetUrl? }`. Runs\n  `fast-check` chaos action generation (and optional real Playwright/CDP\n  headless session) and returns `PossessionReport`.\n- `POST /api/exorcise` — body: `{ scenarioId }`. Applies the self-healing\n  patch to `target-app/phantom-pay.js` on disk, records an incident resolution\n  in `.kiro/specs/incidents/`, and re-runs the PBT verification suite.\n- `GET /api/kiro-files` — returns all 9 `.kiro/` files so judges can inspect\n  them directly in the browser.\n- `GET /mcp/tools` — JSON-RPC 2.0 `tools/list` exposing `possess_target_ui`,\n  `inspect_cdp_forensics`, and `exorcise_and_patch`.\n- `POST /mcp/call` — JSON-RPC 2.0 `tools/call` handler for Kiro IDE agent\n  integration.\n"
     },
@@ -82,7 +186,7 @@
     },
     {
       "path": "specs/possessed-engine/tasks.md",
-      "content": "# Implementation & Verification Tasks — Possessed UI\n\nKOREKSI Phase 0: blueprint menandai semua tugas `[x]`. Belum ada yang dibangun\n— semua tugas di bawah ini BELUM dicentang dan dicentang per phase saat selesai\n+ terverifikasi.\n\n- [x] **Task 1: Poltergeist Chaos & PBT Engine (`src/engine/poltergeist-pbt.ts`)**\n  - [x] 1.1 Implement `fast-check` UI action sequence arbitraries (burst clicks, network delays, storage mutations).\n  - [x] 1.2 Implement minimal counterexample action shrinking when an invariant fails.\n- [ ] **Task 2: CDP & DOM Forensics Medium (`src/engine/cdp-observer.ts`)**\n  - [ ] 2.1 Implement Playwright/CDP console exception, network timing, and DOM state capture.\n  - [x] 2.2 Implement strict `localhost` / `127.0.0.1` URL scope guardrail.\n- [x] **Task 3: Exorcist Self-Healing Patcher (`src/engine/exorcist-healer.ts`)**\n  - [x] 3.1 Synthesize idempotency lock, `AbortController`, and safe JSON storage patches.\n  - [x] 3.2 Apply unified diff to `target-app/phantom-pay.js` and auto-log incident resolution.\n- [x] **Task 4: MCP JSON-RPC 2.0 Server (`src/engine/mcp-server.ts`)**\n  - [x] 4.1 Expose `possess_target_ui`, `inspect_cdp_forensics`, and `exorcise_and_patch` via `tools/list` and `tools/call`.\n- [x] **Task 5: Split-Screen Seance Console & Ghost Cursor UI (`public/`)**\n  - [x] 5.1 Build Split-Screen dashboard with animated Ghost Cursor and CRT possession glitch effects.\n  - [x] 5.2 Embed standalone client-side simulation fallback so GitHub Pages static deployments work identically to local server mode.\n\nKOREKSI Phase 1 (14 Nov 2026): 2.1 BELUM dicentang — capture Playwright/CDP\nsungguhan belum ada; forensik Phase 1 berasal dari run in-process terhadap\ntarget-app nyata + simulasi Mode B. Sisanya tercapai + terverifikasi\n(Vitest 48/48, E2E 24/24).\n"
+      "content": "# Implementation & Verification Tasks — Possessed UI\n\nKOREKSI Phase 0: blueprint menandai semua tugas `[x]`. Belum ada yang dibangun\n— semua tugas di bawah ini BELUM dicentang dan dicentang per phase saat selesai\n+ terverifikasi.\n\n- [x] **Task 1: Poltergeist Chaos & PBT Engine (`src/engine/poltergeist-pbt.ts`)**\n  - [x] 1.1 Implement `fast-check` UI action sequence arbitraries (burst clicks, network delays, storage mutations).\n  - [x] 1.2 Implement minimal counterexample action shrinking when an invariant fails.\n- [x] **Task 2: CDP & DOM Forensics Medium (`src/engine/cdp-observer.ts`)**\n  - [x] 2.1 Implement Playwright/CDP console exception, network timing, and DOM state capture.\n  - [x] 2.2 Implement strict `localhost` / `127.0.0.1` URL scope guardrail.\n- [x] **Task 3: Exorcist Self-Healing Patcher (`src/engine/exorcist-healer.ts`)**\n  - [x] 3.1 Synthesize idempotency lock, `AbortController`, and safe JSON storage patches.\n  - [x] 3.2 Apply unified diff to `target-app/phantom-pay.js` and auto-log incident resolution.\n- [x] **Task 4: MCP JSON-RPC 2.0 Server (`src/engine/mcp-server.ts`)**\n  - [x] 4.1 Expose `possess_target_ui`, `inspect_cdp_forensics`, and `exorcise_and_patch` via `tools/list` and `tools/call`.\n- [x] **Task 5: Split-Screen Seance Console & Ghost Cursor UI (`public/`)**\n  - [x] 5.1 Build Split-Screen dashboard with animated Ghost Cursor and CRT possession glitch effects.\n  - [x] 5.2 Embed standalone client-side simulation fallback so GitHub Pages static deployments work identically to local server mode.\n\nKOREKSI Phase 1 (14 Nov 2026): 2.1 BELUM dicentang — capture Playwright/CDP\nsungguhan belum ada; forensik Phase 1 berasal dari run in-process terhadap\ntarget-app nyata + simulasi Mode B. Sisanya tercapai + terverifikasi\n(Vitest 48/48, E2E 24/24).\n\nKOREKSI Phase 2 (14 Nov 2026): 2.1 TERCENTANG — capture Playwright/CDP\nsungguhan terbukti (Chromium 156 nyata: DOM snapshot, pageerror stack\ntrace `phantom-pay.js:58:23`, throttling 3G; Vitest 69/69, E2E 55/55).\n"
     },
     {
       "path": "steering/chaos-guardrails.md",
