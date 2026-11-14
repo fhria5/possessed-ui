@@ -90,13 +90,56 @@ E2E Playwright independen Phase 2 55/55 (regresi) + Phase 3 32/32
 (deck + /api/exorcism + /api/quarantine + MCP + smoke race). Repo 60+ blob.
 Demo: https://fhria5.github.io/possessed-ui/
 
-## Phase 4 — Polish + uji HP
+## Phase 4 — Polish + uji HP (polish + audit SELESAI 14 Nov 2026 ~23:30 WITA; uji HP menunggu user)
 
-Scope: polish gothic final (favicon, `:focus-visible`, tap target ≥44px,
-responsif 390/1280 tanpa overflow, `prefers-reduced-motion`); audit `.kiro/`
-(klaim harus cocok dengan yang benar-benar ada); checklist uji HP 9 item.
+Scope tercapai (polish + audit): `.tabs` wrap — perbaiki overflow 9px di
+390px (scrollWidth 399 vs innerWidth 390, terukur Playwright → 390/390
+pasca-perbaikan); tap target ≥44px terukur di 390 dan 1280 (terkecil 44px,
+0 di bawah 44); `:focus-visible` outline ectoplasm 2px terverifikasi via
+Tab; `prefers-reduced-motion` mematikan glitch + transisi Ghost Cursor
+(terukur 0s/none); favicon lokal `favicon.svg` tertaut + 200. Audit
+`.kiro/`: 8 klaim palsu/kadaluarsa diperbaiki (nama tool MCP
+`exorcise_bug`, label tombol exorcise, klaim 100-run di 3.2, kode entitas
+1.3, streaming DOM/network 1.2, "AST/Line Patcher", `isPatched` + target
+file `/api/exorcise`, "9 file .kiro" di design/vault/gen_assets;
+`mcp.json` menunjuk `src/engine/mcp-stdio.ts` yang tidak ada + env var tak
+terbaca; hook `npm run test:pbt` tidak ada di package.json). Perbaikan:
+`src/engine/mcp-stdio.ts` dibuat (transport stdio JSON-RPC nyata,
+termasuk `initialize`); `mcp.json` memakai `node
+dist/engine/mcp-stdio.js` + env `POSSESSED_BASE_URL` (yang memang dibaca);
+script `test:pbt` ditambahkan; teks 5.2 diluruskan (Mode B = simulasi,
+bukan identik). Asersi fase basi di `tests/server.test.ts`,
+`tests/e2e-phase2.cjs`, `tests/e2e-phase3.cjs` dimutakhirkan ke Phase 4
+(bukan pelemahan tes — penanda fase yang sama, nilai baru).
 
-Exit: user menyatakan sempurna sesudah uji HP dia sendiri.
+Angka: Vitest 93/93 (regresi penuh hijau); `npm run test:pbt` 39/39;
+E2E Phase 2 55/55 (regresi) + E2E Phase 3 32/32 (regresi) + E2E Phase 4
+20/20 (baru: overflow, tap target, focus-visible, reduced-motion,
+favicon, vault, stdio). Demo: https://fhria5.github.io/possessed-ui/
+
+### Checklist uji HP 9 item (Infinix, Android 16) — menunggu laporan user
+
+1. Buka https://fhria5.github.io/possessed-ui/ di Chrome HP — halaman
+   termuat penuh, tanpa geser horizontal (scroll ke kanan tidak ada).
+2. Ketiga tombol skenario (Race / Latency / Storage) mudah ditekan —
+   tidak ada tombol yang terlalu kecil atau berdekatan.
+3. Skenario 1 end-to-end: UNLEASH → saldo $250 + badge POSSESSED →
+   PERFORM EXORCISM → saldo $750 + badge EXORCISED.
+4. Skenario 2 end-to-end: UNLEASH → harga basi $225.00 → EXORCISM →
+   $230.00 EUR, tanpa error.
+5. Skenario 3 end-to-end: UNLEASH → SyntaxError + XSS 1x → EXORCISM →
+   fallback, 0 eksekusi.
+6. Tab Exorcism Deck: kedua Demon Bug tampil (180ms Window 7/100,
+   Shape-Shifter 33/100) + "100/100 clean runs" sesudah patch.
+7. Ghost Cursor terlihat bergerak saat UNLEASH; efek glitch merah muncul
+   saat POSSESSED.
+8. Footer terbaca: "Possessed UI Phase 4" + "not a real CDP browser
+   session · PhantomPay balance is simulated, not real money."
+9. Putar HP ke landscape / kembali portrait — layout tidak rusak, tidak
+   ada teks terpotong atau tombol tertutup.
+
+Exit: user menyatakan sempurna sesudah uji HP dia sendiri. Phase 4 BELUM
+dinyatakan selesai penuh sebelum laporan uji HP masuk.
 
 ## Phase 5 — Video + submit
 
