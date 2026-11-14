@@ -1,0 +1,78 @@
+# Rencana Per Phase — Possessed UI (Kiroween 2026, Frankenstein)
+
+App kedua Kiroween. App pertama: FreshTrack. Pengganti NecroMCP (DIBATALKAN user
+14 Nov 2026 ~21:48 — jangan sentuh repo/folder NecroMCP).
+
+Sumber spek: `SPEK.md` (salinan verbatim blueprint user,
+`Possessed_UI_Master_Blueprint_and_One-Shot_Prompt_25_7319.md`).
+Repo: https://github.com/fhria5/possessed-ui (publik, MIT, /.kiro di root).
+Demo: belum live (Phase 1).
+Deadline submit Kiroween: **5 Des 2026 06:00 WITA**.
+
+## Batas jujur (mengikat)
+
+- Klaim blueprint "selesai 100% dalam satu run tanpa jeda (YOLO)" **DITOLAK** —
+  build bertahap per phase, tiap phase diverifikasi sebelum lanjut.
+- Demo GitHub Pages = **Mode B (simulasi statis di browser)**, bukan CDP browser
+  sungguhan. CDP/Playwright nyata hanya di Mode A (server lokal).
+- Saldo PhantomPay ($1.000, item $250) adalah **simulasi, bukan uang nyata**.
+- `tasks.md` di blueprint menandai semua tugas `[x]` — diperbaiki di Phase 0
+  menjadi BELUM dicentang (belum ada yang dibangun).
+- Write-up Devpost wajib jujur soal porsi yang dibangun Kiro vs dibangun
+  langsung di Muse mengikuti spek `.kiro/`.
+
+## Phase 0 — Spek + repo (SELESAI di sini)
+
+Scope: `SPEK.md` verbatim, rencana ini, README, LICENSE MIT, `.gitignore`
+(yang TIDAK mengabaikan `.kiro/`), 9 file `.kiro/` dari Part 4 blueprint
+(dengan koreksi tasks.md), `target-app/phantom-pay.js` versi VULNERABLE saja,
+`tools/create_repo.py`; repo GitHub `fhria5/possessed-ui` dibuat + semua file
+ter-push; verifikasi via API tree.
+
+Exit: repo publik ada, tree terverifikasi, `.kiro/` tidak terabaikan,
+0 baris kode engine/UI.
+
+## Phase 1 — MVP (berikutnya)
+
+Scope: engine inti (Poltergeist PBT + CDP observer + Exorcist healer, Mode B
+dulu), UI skeleton split-screen Mode B, skenario 1 Chronos Race Poltergeist
+end-to-end (possess → crash $250 → exorcise → $750 + 0 error), demo Pages live.
+
+Exit: demo live; skenario 1 jalan penuh di browser; Vitest + E2E hijau;
+footer demo memuat penanda versi + "simulasi, bukan CDP sungguhan".
+
+## Phase 2 — 3 skenario + MCP + guardrail
+
+Scope: skenario 2 Latency Wraith + skenario 3 Storage & XSS Banshee;
+MCP server (`tools/list`, `tools/call`: `possess_target_ui`,
+`inspect_cdp_forensics`, `exorcise_and_patch`); guardrail allowlist
+localhost/127.0.0.1 saja; tab Forensics & Diff + Live MCP Stream + `.kiro/` Vault.
+
+Exit: ketiga skenario jalan; MCP merespons via JSON-RPC; URL eksternal ditolak
+guardrail; regresi Phase 1 tetap hijau.
+
+## Phase 3 — PBT Exorcism + self-heal + verifikasi 100 run
+
+Scope: fast-check 100 run/artifact + shrinking deterministik ke urutan aksi
+minimal; Auto-Patch (idempotency lock + AbortController + try/catch storage);
+re-run counterexample + 100 run pasca-patch = 0 crash; laporan insiden ke
+`.kiro/specs/incidents/`.
+
+Exit: PBT 100/100 pasca-patch di ketiga skenario; counterexample ter-shrink
+tercatat; Vitest + E2E hijau.
+
+## Phase 4 — Polish + uji HP
+
+Scope: polish gothic final (favicon, `:focus-visible`, tap target ≥44px,
+responsif 390/1280 tanpa overflow, `prefers-reduced-motion`); audit `.kiro/`
+(klaim harus cocok dengan yang benar-benar ada); checklist uji HP 9 item.
+
+Exit: user menyatakan sempurna sesudah uji HP dia sendiri.
+
+## Phase 5 — Video + submit
+
+Scope: video demo <3 menit, YouTube **Public** (bukan Unlisted); write-up
+Devpost (jujur soal porsi Kiro + Mode B simulasi); submit kategori
+**Frankenstein**; posting Social Blitz + blog (bonus prize).
+
+Target: 30 Nov–2 Des 2026. Deadline: 5 Des 2026 06:00 WITA.
