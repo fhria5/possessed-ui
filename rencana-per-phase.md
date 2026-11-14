@@ -65,15 +65,30 @@ Angka: Vitest 69/69 (48 regresi Phase 1 tetap hijau + 21 baru, termasuk
 skenario + MCP + CDP via HTTP + guardrail + incident). Repo 53 blob,
 commit Phase 2 (lihat GitHub). Demo: https://fhria5.github.io/possessed-ui/
 
-## Phase 3 — PBT Exorcism + self-heal + verifikasi 100 run
+## Phase 3 — PBT Exorcism + self-heal + verifikasi 100 run (SELESAI 14 Nov 2026 ~23:01 WITA)
 
-Scope: fast-check 100 run/artifact + shrinking deterministik ke urutan aksi
-minimal; Auto-Patch (idempotency lock + AbortController + try/catch storage);
-re-run counterexample + 100 run pasca-patch = 0 crash; laporan insiden ke
-`.kiro/specs/incidents/`.
+Scope tercapai: fast-check 100 run/scenario (seed tetap 20261121/20261122/
+20261123) dengan arbitrary berbobot-batas menemukan 2 Demon Bug NYATA pada
+patch Phase 1/2 — **The 180ms Window Demon** (burst 5 klik
+[20,46,46,50,48]ms menembus jendela /api/pay 180ms → $500,00/2 charge;
+7/100 run; shrink minimal tetap 5 klik, 5 langkah) dan **The Shape-Shifter
+Demon** (cart JSON valid tapi bentuk salah — `null`, `{"items": "x"}` —
+meracuni state.cart; 33/100 run; shrink ke 1 langkah `CORRUPT_STORAGE
+"null"`, 3 langkah). Auto-Patch memperbaiki template healer (jendela
+idempotency 1000ms + validasi bentuk cart `{ items: [...] }`), lalu
+re-verifikasi **100/100 IMMUNE di ketiga skenario**. Network 3G jujur
+0/100 tanpa demon bug — tidak ada yang dikarang. Karantina tool MCP:
+`exorcise_and_patch` yang gagal verifikasi ditolak `tools/call` dengan
+status `quarantined` + alasan (error -32099) dan tercatat di incident
+JSON; verifikasi pasca-patch tidak dikarantina. Deck Exorcism di UI (tab
+baru) menampilkan demon, input, shrink, patch, dan hasil re-verifikasi
+dari `exorcism-report.json` (angka nyata, tanpa placeholder).
 
-Exit: PBT 100/100 pasca-patch di ketiga skenario; counterexample ter-shrink
-tercatat; Vitest + E2E hijau.
+Angka: Vitest 93/93 (69 regresi Phase 1–2 tetap hijau + 24 baru,
+termasuk 100-run ×3 skenario + hunter-vs-vulnerable + karantina);
+E2E Playwright independen Phase 2 55/55 (regresi) + Phase 3 32/32
+(deck + /api/exorcism + /api/quarantine + MCP + smoke race). Repo 60+ blob.
+Demo: https://fhria5.github.io/possessed-ui/
 
 ## Phase 4 — Polish + uji HP
 
