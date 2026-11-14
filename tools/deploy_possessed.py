@@ -19,7 +19,7 @@ import dynamic_credentials
 
 OWNER, REPO, BRANCH = 'fhria5', 'possessed-ui', 'main'
 BASE = '/home/hatch/workspace/possessed-ui/'
-MESSAGE = 'Possessed UI Phase 1: MVP engine + Mode B console + race scenario'
+MESSAGE = 'Possessed UI Phase 2: 3 scenarios + real CDP capture + MCP + guardrail'
 
 FILES = [
     '.nojekyll',
@@ -33,18 +33,21 @@ FILES = [
     'src/engine/cdp-observer.ts',
     'src/engine/exorcist-healer.ts',
     'src/engine/mcp-server.ts',
+    'src/engine/possess-service.ts',
     'src/server.ts',
     'target-app/phantom-pay.js',
     'target-app/phantom-pay.patched.js',
     'public/index.html',
     'public/styles.css',
     'public/app.js',
+    'public/cdp-harness.html',
     'public/favicon.svg',
     'public/patch.diff',
     'public/kiro-files.json',
     'docs/index.html',
     'docs/styles.css',
     'docs/app.js',
+    'docs/cdp-harness.html',
     'docs/favicon.svg',
     'docs/patch.diff',
     'docs/kiro-files.json',
@@ -53,7 +56,8 @@ FILES = [
     'tests/observer.test.ts',
     'tests/mcp.test.ts',
     'tests/server.test.ts',
-    'tests/e2e-phase1.cjs',
+    'tests/cdp.test.ts',
+    'tests/e2e-phase2.cjs',
     'tools/deploy_possessed.py',
     'tools/gen_assets.cjs',
     '.kiro/specs/possessed-engine/requirements.md',
@@ -95,7 +99,7 @@ subprocess.run(['node', '-e',
                 "require('./dist/engine/exorcist-healer.js').applyPatch('RACE_DOUBLE_CHARGE')"],
                cwd=BASE, check=True)
 os.makedirs(BASE + 'docs', exist_ok=True)
-for _f in ('index.html', 'styles.css', 'app.js', 'favicon.svg', 'patch.diff', 'kiro-files.json'):
+for _f in ('index.html', 'styles.css', 'app.js', 'cdp-harness.html', 'favicon.svg', 'patch.diff', 'kiro-files.json'):
     shutil.copyfile(BASE + 'public/' + _f, BASE + 'docs/' + _f)
 open(BASE + '.nojekyll', 'a').close()
 print('docs/ regenerated from public/')
