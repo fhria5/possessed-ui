@@ -1,0 +1,1 @@
+{"actions":[{"command":"npm run test:pbt","type":"command"}],"description":"Runs fast-check property-based chaos suites automatically whenever target-app or engine files are patched","enabled":true,"name":"PBT Immunity Regression Gate","trigger":{"event":"onFileSave","filePattern":"target-app/**/*.js"}}
