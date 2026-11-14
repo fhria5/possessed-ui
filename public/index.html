@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Possessed UI Phase 1 — Paranormal Chaos &amp; Self-Healing Agent</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">POSSESSED UI <span class="brand-sub">// PARANORMAL CHAOS &amp; SELF-HEALING AGENT</span></div>
+  <div class="badges" role="status" aria-label="System status">
+    <span class="badge ok">MCP BRIDGE: ACTIVE</span>
+    <span class="badge ok">CDP OBSERVER: ARMED</span>
+    <span class="badge ok">KIRO SPECS: SYNCED</span>
+    <span class="badge warn">SCOPE GUARD: LOCALHOST ONLY</span>
+    <span class="badge">MODE B — SIMULATION</span>
+  </div>
+</header>
+
+<main class="seance">
+  <!-- LEFT: Exorcist Command Console -->
+  <section class="console" aria-label="Exorcist command console">
+    <h1>The Exorcist&rsquo;s Seance Console</h1>
+    <p class="lede">Unleash the Poltergeist on PhantomPay checkout. Watch it
+      double-charge a $250 relic, then exorcise the bug and prove immunity.</p>
+
+    <h2>Step 1 — Choose possession entity</h2>
+    <div class="scenarios" role="group" aria-label="Possession scenarios">
+      <button type="button" class="scenario active" id="scenario-race" data-scenario="RACE_DOUBLE_CHARGE" aria-pressed="true">
+        <span class="scenario-ico" aria-hidden="true">👻</span>
+        <span class="scenario-name">1. Chronos Race Poltergeist</span>
+        <span class="scenario-desc">Triple-click checkout race → double charge</span>
+      </button>
+      <button type="button" class="scenario" disabled aria-disabled="true" title="Ships in Phase 2">
+        <span class="scenario-ico" aria-hidden="true">🌫️</span>
+        <span class="scenario-name">2. Latency Wraith</span>
+        <span class="scenario-desc">Out-of-order fetch chaos</span>
+        <span class="phase-tag">Phase 2</span>
+      </button>
+      <button type="button" class="scenario" disabled aria-disabled="true" title="Ships in Phase 2">
+        <span class="scenario-ico" aria-hidden="true">💀</span>
+        <span class="scenario-name">3. Storage &amp; XSS Banshee</span>
+        <span class="scenario-desc">Corrupted localStorage + script injection</span>
+        <span class="phase-tag">Phase 2</span>
+      </button>
+    </div>
+
+    <h2>Step 2 — Action controls</h2>
+    <div class="controls">
+      <button type="button" class="btn primary" id="btn-unleash">🔮 UNLEASH POLTERGEIST (PBT CHAOS RUN)</button>
+      <button type="button" class="btn heal" id="btn-exorcise" hidden>✝️ PERFORM EXORCISM (SELF-HEAL &amp; RE-VERIFY)</button>
+      <button type="button" class="btn ghost" id="btn-reset">↺ Reset Target App to Vulnerable State</button>
+    </div>
+    <p class="run-status" id="run-status" role="status">Idle. PhantomPay is vulnerable — balance $1,000.00.</p>
+
+    <h2>Step 3 — Telemetry inspector</h2>
+    <div class="tabs" role="tablist" aria-label="Telemetry inspector">
+      <button type="button" class="tab active" role="tab" aria-selected="true" data-tab="forensics">Forensics &amp; Diff</button>
+      <button type="button" class="tab" role="tab" aria-selected="false" data-tab="mcp">Live MCP Stream</button>
+      <button type="button" class="tab" role="tab" aria-selected="false" data-tab="vault">.kiro/ Vault</button>
+    </div>
+    <div class="tab-panels">
+      <div class="tab-panel active" id="panel-forensics" role="tabpanel">
+        <div id="forensics-empty" class="muted">No possession run yet. Unleash the Poltergeist to capture forensics.</div>
+        <div id="forensics-body" hidden>
+          <p><strong>Violated invariant:</strong> <span id="f-invariant"></span></p>
+          <p><strong>Entity:</strong> <span id="f-entity"></span></p>
+          <p><strong>Target:</strong> <code id="f-target"></code></p>
+          <p><strong>Corruption:</strong> <span id="f-corruption"></span></p>
+          <p><strong>Shrunk action sequence:</strong></p>
+          <ol id="f-sequence"></ol>
+          <p><strong>Unified diff (Exorcist patch):</strong></p>
+          <pre id="f-diff" class="diff">Patch diff loads after exorcism…</pre>
+        </div>
+      </div>
+      <div class="tab-panel" id="panel-mcp" role="tabpanel">
+        <p class="muted">Mode B local MCP log — JSON-RPC 2.0 payloads executed in-browser
+          (same shapes as the Mode A server&rsquo;s <code>/mcp/call</code>).</p>
+        <pre id="mcp-log" class="log">— no calls yet —</pre>
+      </div>
+      <div class="tab-panel" id="panel-vault" role="tabpanel">
+        <p class="muted">The 9 <code>.kiro/</code> files that drive the agent. Loaded from
+          <code>kiro-files.json</code> (generated at deploy time from the repo).</p>
+        <ul id="vault-list" class="vault-list"></ul>
+        <pre id="vault-content" class="log" hidden></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- RIGHT: Haunted Target App Sandbox -->
+  <section class="arena" aria-label="Haunted target app sandbox">
+    <div class="arena-head">
+      <h2>PhantomPay Checkout <span class="arena-sub">— haunted target app (sandbox)</span></h2>
+      <span class="possessed-badge" id="possessed-badge" hidden>⚠️ UI POSSESSED — INVARIANT VIOLATED</span>
+      <span class="immune-badge" id="immune-badge" hidden>✝️ EXORCISED — IMMUNE</span>
+    </div>
+    <div class="target" id="target-app">
+      <div class="wallet">
+        <span class="wallet-label">Wallet Balance</span>
+        <span class="wallet-balance" id="wallet-balance">$1,000.00</span>
+        <span class="wallet-meta" id="wallet-meta">0 charges · 0 console errors</span>
+      </div>
+      <div class="item-card">
+        <div class="item-ico" aria-hidden="true">🏺</div>
+        <div class="item-info">
+          <strong>Cursed Relic</strong>
+          <span id="item-price">$250.00</span>
+        </div>
+      </div>
+      <label class="discount-label" for="discount-input">Discount code
+        <input id="discount-input" type="text" placeholder="GHOST10" autocomplete="off">
+      </label>
+      <button type="button" class="btn pay" id="pay-button">Pay $250</button>
+      <div class="integrity">
+        <span>State Integrity</span>
+        <div class="meter" aria-hidden="true"><div class="meter-fill" id="integrity-fill" style="width:100%"></div></div>
+        <span id="integrity-text">100% — intact</span>
+      </div>
+      <div class="console-log" aria-label="Target app console output">
+        <div class="console-title">PhantomPay console</div>
+        <pre id="target-log">ready — wallet $1,000.00, cart empty.</pre>
+      </div>
+      <div class="ghost-cursor" id="ghost-cursor" aria-hidden="true">👻</div>
+    </div>
+    <p class="arena-note">The Ghost Cursor is the Poltergeist: it flies to the Pay button
+      and triple-clicks it in 40ms. The 180ms <code>/api/pay</code> latency is
+      the race window — every click fires its own charge.</p>
+  </section>
+</main>
+
+<footer class="foot">
+  <span>Possessed UI Phase 1 · 1 scenario live (Chronos Race Poltergeist) · 2 scenarios in Phase 2</span>
+  <span>Mode B static simulation — not a real CDP browser session · PhantomPay balance is simulated, not real money.</span>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
