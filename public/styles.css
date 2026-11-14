@@ -212,7 +212,8 @@ h2 { font-size: 1rem; margin: 20px 0 8px; color: var(--ectoplasm); }
 .item-info { display: grid; }
 .item-info span { color: var(--muted); }
 .discount-label { display: grid; gap: 6px; margin-top: 14px; font-size: 0.9rem; }
-.discount-label input {
+.discount-label input,
+.discount-label select {
   min-height: 44px;
   background: var(--bg-panel);
   color: var(--text);
@@ -220,6 +221,18 @@ h2 { font-size: 1rem; margin: 20px 0 8px; color: var(--ectoplasm); }
   border-radius: 8px;
   padding: 8px 10px;
   font: inherit;
+}
+.price-line { margin: 14px 0 0; font-size: 0.95rem; }
+.price-line strong { font-variant-numeric: tabular-nums; }
+.cart-box { margin-top: 14px; }
+.cart-label { color: var(--muted); font-size: 0.85rem; }
+.cart-view {
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  min-height: 28px;
+  margin-top: 6px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
 }
 .btn.pay {
   width: 100%;
