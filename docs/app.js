@@ -44,6 +44,9 @@ function createPhantomPayMirror(patched) {
     displayedPriceCents: ITEM_PRICE_CENTS,
   };
   let inFlightCheckout = null;
+  let lastCharge = null;
+  let lastCheckoutAt = 0;
+  const IDEMPOTENCY_WINDOW_MS = 1000;
   let latestPriceRequest = 0;
   let priceAbort = null;
 
@@ -75,14 +78,20 @@ function createPhantomPayMirror(patched) {
   }
 
   // Vulnerable: no lock — every click fires its own payApi call.
-  // Patched (mirrors exorcist-healer.ts): inFlightLock + idempotencyKey.
+  // Patched (mirrors exorcist-healer.ts): inFlightLock + idempotencyKey
+  // + 1000ms grace window (Phase 3 Demon Bug fix: a 5-click burst
+  // spanning the 180ms /api/pay window charged twice).
   async function handleCheckout() {
     if (patched) {
       if (inFlightCheckout) return inFlightCheckout;
+      const now = Date.now();
+      if (lastCharge && now - lastCheckoutAt < IDEMPOTENCY_WINDOW_MS) return lastCharge;
       const idempotencyKey = 'idem_' + Date.now() + '_' + Math.floor(Math.random() * 1e6);
       inFlightCheckout = payApi(ITEM_PRICE_CENTS).finally(() => { inFlightCheckout = null; });
       const charge = await inFlightCheckout;
       charge.idempotencyKey = idempotencyKey;
+      lastCharge = charge;
+      lastCheckoutAt = Date.now();
       return charge;
     }
     return payApi(ITEM_PRICE_CENTS);
@@ -143,7 +152,11 @@ function createPhantomPayMirror(patched) {
     }
     if (patched) {
       try {
-        state.cart = JSON.parse(raw);
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== 'object' || !Array.isArray(parsed.items)) {
+          throw new Error('cart shape invalid: expected { items: [...] }');
+        }
+        state.cart = parsed;
       } catch (err) {
         state.consoleErrors.push('Storage parse failed, fell back to empty cart: ' + err.message);
         state.cart = { items: [] };
@@ -607,3 +620,83 @@ async function loadVault() {
 render();
 renderCart();
 loadVault();
+loadExorcismDeck();
+
+// Phase 3 Exorcism Deck: real 100-run PBT verification numbers from
+// exorcism-report.json (generated at build time). All text is injected
+// via textContent — the report contains raw XSS payload strings, which
+// must never reach innerHTML.
+async function loadExorcismDeck() {
+  const deck = $('exorcism-deck');
+  const NAMES = {
+    RACE_DOUBLE_CHARGE: 'Chronos Race Poltergeist',
+    NETWORK_3G_CHAOS: 'Latency Wraith',
+    STORAGE_XSS_SPECTER: 'Storage & XSS Banshee',
+  };
+  function el(tag, cls, text) {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined) n.textContent = text;
+    return n;
+  }
+  function stepSummary(steps) {
+    return steps.map((s) => {
+      const base = s.actionType + (s.selector ? ' ' + s.selector : '') + (s.payload !== undefined ? ' ' + JSON.stringify(s.payload) : '');
+      return base + ', delay ' + s.delayMs + 'ms';
+    });
+  }
+  try {
+    const res = await fetch('exorcism-report.json');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const report = await res.json();
+    deck.textContent = '';
+    const meta = el('p', 'muted',
+      'Generated ' + report.generatedAt + ' · ' + report.runsPerScenario +
+      ' runs/scenario · seed base ' + report.seedBase + ' (per-scenario seeds in the report).');
+    deck.appendChild(meta);
+    if (report.quarantine && report.quarantine.quarantined) {
+      deck.appendChild(el('p', 'demon', '⚠️ QUARANTINED: ' + report.quarantine.tool + ' — ' + report.quarantine.reason));
+    }
+    for (const scenarioId of Object.keys(report.scenarios)) {
+      const s = report.scenarios[scenarioId];
+      const card = el('article', 'deck-card');
+      card.appendChild(el('h3', null, NAMES[scenarioId] || scenarioId));
+      card.appendChild(el('p', 'muted', 'seed ' + s.seed + ' · ' + s.before.runs + ' runs'));
+      const before = el('p', null,
+        'Before patch: ' + s.before.violations + '/' + s.before.runs +
+        ' runs violated the invariant (' + s.before.status + ').');
+      before.classList.add(s.before.violations > 0 ? 'demon' : 'immune');
+      card.appendChild(before);
+      if (s.demonBug) {
+        const d = s.demonBug;
+        card.appendChild(el('p', 'demon', '👹 Demon Bug: ' + d.name));
+        card.appendChild(el('p', null, 'Observed: ' + d.observed.detail));
+        if (d.observed.cartJson !== undefined) {
+          card.appendChild(el('p', null, 'Poisoned cart: ' + d.observed.cartJson));
+        }
+        const inputTitle = el('p', null, 'Demon input (' + d.input.length + ' steps):');
+        card.appendChild(inputTitle);
+        const inputList = el('ol', null);
+        stepSummary(d.input).forEach((line) => inputList.appendChild(el('li', null, line)));
+        card.appendChild(inputList);
+        card.appendChild(el('p', null,
+          'Shrunk to ' + d.shrunkSequence.length + ' steps in ' + d.shrinkSteps + ' shrink steps:'));
+        const shrunkList = el('ol', null);
+        stepSummary(d.shrunkSequence).forEach((line) => shrunkList.appendChild(el('li', null, line)));
+        card.appendChild(shrunkList);
+        card.appendChild(el('p', null, 'Auto-Patch: ' + d.patch));
+      } else {
+        card.appendChild(el('p', 'immune', 'No demon bug found in ' + s.before.runs + ' boundary-weighted runs.'));
+      }
+      const after = el('p', null,
+        'After Auto-Patch: ' + (s.after.runs - s.after.violations) + '/' + s.after.runs +
+        ' clean runs (' + s.after.status + ').');
+      after.classList.add(s.after.violations === 0 ? 'immune' : 'demon');
+      card.appendChild(after);
+      deck.appendChild(card);
+    }
+  } catch (e) {
+    deck.textContent = 'Exorcism report unavailable in this copy (' + e.message + '). Run tools/run_exorcism.cjs to generate it.';
+    deck.className = 'muted';
+  }
+}
