@@ -17,7 +17,7 @@ KOREKSI Phase 0: blueprint menandai semua tugas `[x]`. Belum ada yang dibangun
   - [x] 4.1 Expose `possess_target_ui`, `inspect_cdp_forensics`, and `exorcise_and_patch` via `tools/list` and `tools/call`.
 - [x] **Task 5: Split-Screen Seance Console & Ghost Cursor UI (`public/`)**
   - [x] 5.1 Build Split-Screen dashboard with animated Ghost Cursor and CRT possession glitch effects.
-  - [x] 5.2 Embed standalone client-side simulation fallback so GitHub Pages static deployments work identically to local server mode.
+  - [x] 5.2 Embed standalone client-side simulation fallback so GitHub Pages static deployments work as a Mode B simulation (not identical to local server mode — no real CDP session in the browser; the footer says so).
 
 KOREKSI Phase 1 (14 Nov 2026): 2.1 BELUM dicentang — capture Playwright/CDP
 sungguhan belum ada; forensik Phase 1 berasal dari run in-process terhadap
@@ -41,3 +41,26 @@ trace `phantom-pay.js:58:23`, throttling 3G; Vitest 69/69, E2E 55/55).
     + incident JSON; `GET /api/quarantine` + `GET /api/exorcism`.
   - [x] 6.4 Deck Exorcism di UI (tab baru): demon, input, shrink,
     patch, hasil re-verifikasi dari `exorcism-report.json` (angka nyata).
+
+- [x] **Task 7: Gothic Polish + .kiro/ Audit (Phase 4, 14 Nov 2026)**
+  - [x] 7.1 Polish: `.tabs` wrap (perbaiki overflow 9px di 390px —
+    scrollWidth 399 vs innerWidth 390, terukur Playwright); tap target
+    ≥44px terukur di 390/1280 (terkecil 44px); `:focus-visible`
+    outline ectoplasm 2px terverifikasi via Tab; `prefers-reduced-motion`
+    mematikan glitch + transisi Ghost Cursor (terukur 0s/none); favicon
+    lokal `favicon.svg` tertaut.
+  - [x] 7.2 Audit `.kiro/`: 8 klaim palsu/kadaluarsa diperbaiki —
+    `exorcise_bug` → `exorcise_and_patch`, label tombol exorcise,
+    100-run di 3.2, kode entitas 1.3, streaming DOM/network 1.2,
+    "AST/Line Patcher", `isPatched` + target file `/api/exorcise`,
+    "9 file .kiro" di design/vault/gen_assets; `mcp.json` menunjuk
+    `src/engine/mcp-stdio.ts` yang tidak ada + env var tak terbaca;
+    hook `npm run test:pbt` tidak ada di package.json.
+  - [x] 7.3 Perbaikan audit: `src/engine/mcp-stdio.ts` dibuat (transport
+    stdio JSON-RPC nyata, termasuk `initialize`); `mcp.json` memakai
+    `node dist/engine/mcp-stdio.js` + env `POSSESSED_BASE_URL` (yang
+    memang dibaca `resolveBaseUrl`); script `test:pbt` ditambahkan ke
+    `package.json`; teks 5.2 diluruskan (Mode B = simulasi, bukan identik).
+  - [x] 7.4 Tes polish baru `tests/polish-phase4.cjs` (Playwright):
+    overflow 390/1280, tap target, focus-visible, reduced-motion,
+    favicon 200, footer + marker Phase 4; regresi Vitest + E2E hijau.
