@@ -19,7 +19,7 @@ import dynamic_credentials
 
 OWNER, REPO, BRANCH = 'fhria5', 'possessed-ui', 'main'
 BASE = '/home/hatch/workspace/possessed-ui/'
-MESSAGE = 'Possessed UI Phase 2: 3 scenarios + real CDP capture + MCP + guardrail'
+MESSAGE = 'Possessed UI Phase 3: PBT Exorcism 100 runs + Demon Bugs auto-patched + quarantine + deck'
 
 FILES = [
     '.nojekyll',
@@ -34,6 +34,7 @@ FILES = [
     'src/engine/exorcist-healer.ts',
     'src/engine/mcp-server.ts',
     'src/engine/possess-service.ts',
+    'src/engine/exorcism-pbt.ts',
     'src/server.ts',
     'target-app/phantom-pay.js',
     'target-app/phantom-pay.patched.js',
@@ -44,6 +45,7 @@ FILES = [
     'public/favicon.svg',
     'public/patch.diff',
     'public/kiro-files.json',
+    'public/exorcism-report.json',
     'docs/index.html',
     'docs/styles.css',
     'docs/app.js',
@@ -51,19 +53,24 @@ FILES = [
     'docs/favicon.svg',
     'docs/patch.diff',
     'docs/kiro-files.json',
+    'docs/exorcism-report.json',
     'tests/poltergeist.test.ts',
     'tests/healer.test.ts',
     'tests/observer.test.ts',
     'tests/mcp.test.ts',
     'tests/server.test.ts',
     'tests/cdp.test.ts',
+    'tests/exorcism.test.ts',
     'tests/e2e-phase2.cjs',
+    'tests/e2e-phase3.cjs',
     'tools/deploy_possessed.py',
+    'tools/run_exorcism.cjs',
     'tools/gen_assets.cjs',
     '.kiro/specs/possessed-engine/requirements.md',
     '.kiro/specs/possessed-engine/design.md',
     '.kiro/specs/possessed-engine/tasks.md',
     '.kiro/specs/incidents/.gitkeep',
+    '.kiro/specs/incidents/exorcism-phase3-2026-11-14T15-01-35-645Z.json',
     '.kiro/steering/frontend-resilience.md',
     '.kiro/steering/chaos-guardrails.md',
     '.kiro/steering/seance-ui-standards.md',
@@ -99,7 +106,7 @@ subprocess.run(['node', '-e',
                 "require('./dist/engine/exorcist-healer.js').applyPatch('RACE_DOUBLE_CHARGE')"],
                cwd=BASE, check=True)
 os.makedirs(BASE + 'docs', exist_ok=True)
-for _f in ('index.html', 'styles.css', 'app.js', 'cdp-harness.html', 'favicon.svg', 'patch.diff', 'kiro-files.json'):
+for _f in ('index.html', 'styles.css', 'app.js', 'cdp-harness.html', 'favicon.svg', 'patch.diff', 'kiro-files.json', 'exorcism-report.json'):
     shutil.copyfile(BASE + 'public/' + _f, BASE + 'docs/' + _f)
 open(BASE + '.nojekyll', 'a').close()
 print('docs/ regenerated from public/')
