@@ -45,7 +45,9 @@ async function postJson(url, body) {
   await page.goto(BASE, { waitUntil: 'networkidle' });
   check('demo loads', (await page.title()).includes('Possessed UI'));
   check('footer honesty line present', (await page.textContent('footer')).includes('not a real CDP browser session'));
-  check('footer Phase 2 marker', (await page.textContent('footer')).includes('Possessed UI Phase 2'));
+  // Phase 3 moved the footer marker to Phase 3; the flows below are the
+  // Phase 2 regression (all 3 scenarios + MCP + CDP + guardrail).
+  check('footer Phase 3 marker', (await page.textContent('footer')).includes('Possessed UI Phase 3'));
   check('all 3 scenario buttons enabled', (await page.locator('.scenario:enabled').count()) === 3);
   check('initial balance $1,000.00', (await page.textContent('#wallet-balance')).trim() === '$1,000.00');
   check('displayed price $250.00', (await page.textContent('#displayed-price')).trim() === '$250.00');
