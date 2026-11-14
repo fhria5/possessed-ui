@@ -4,7 +4,7 @@
 FreshTrack). Pengganti NecroMCP (dibatalkan user 14 Nov 2026).
 
 Repo: https://github.com/fhria5/possessed-ui
-Demo: belum live (Phase 1).
+Demo: https://fhria5.github.io/possessed-ui/ (live, Phase 1).
 
 ## Konsep
 
@@ -40,20 +40,34 @@ $250. Semua saldo simulasi, bukan uang nyata.
 
 - **Phase 0 SELESAI** (14 Nov 2026): spek + repo + 9 file `.kiro/` +
   `target-app/phantom-pay.js` versi vulnerable. Belum ada engine/UI.
-- Phase 1 (MVP): berikutnya — engine inti + UI skeleton Mode B + skenario 1.
-- Submit: target 30 Nov–2 Des 2026; deadline 5 Des 2026 06:00 WITA.
+- **Phase 1 SELESAI + LIVE** (14 Nov 2026): engine inti (Poltergeist PBT +
+  CDP observer + Exorcist healer + MCP server), server Express Mode A,
+  UI split-screen Mode B, skenario 1 Chronos Race Poltergeist end-to-end
+  (crash $250 → exorcise → $750 + 0 error). Vitest 48/48, E2E 24/24.
+  Demo: https://fhria5.github.io/possessed-ui/
+- Phase 2 (berikutnya): skenario 2 + 3, guardrail MCP penuh, tab Vault/MCP.
 
 ## Struktur
 
 ```text
 possessed-ui/
 ├── .kiro/                  # specs (EARS) + steering + hooks + settings/mcp.json
+├── src/
+│   ├── types/possessed.ts  # PossessionReport, ChaosActionStep, …
+│   ├── engine/             # poltergeist-pbt, cdp-observer, exorcist-healer, mcp-server
+│   └── server.ts           # Express Mode A: /api/* + /mcp/*
 ├── target-app/
-│   └── phantom-pay.js      # target rentan (3 bug), dipatch Exorcist saat demo
+│   ├── phantom-pay.js          # target rentan (3 bug)
+│   └── phantom-pay.patched.js  # hasil Exorcist (dibuat ulang tiap exorcise)
+├── public/                 # Mode B dashboard (index.html + styles.css + app.js)
+├── docs/                   # salinan public/ untuk GitHub Pages (dibuat tiap deploy)
+├── tests/                  # Vitest 48 + Playwright E2E Phase 1
 ├── SPEK.md                 # blueprint verbatim
 ├── rencana-per-phase.md    # rencana Phase 0–5 + batas jujur
 └── tools/
-    └── create_repo.py      # pembuatan repo + push via GitHub API
+    ├── create_repo.py      # pembuatan repo + push via GitHub API
+    ├── deploy_possessed.py # build + push + Pages
+    └── gen_assets.cjs      # patch.diff + kiro-files.json untuk Mode B
 ```
 
 ## Batas jujur
