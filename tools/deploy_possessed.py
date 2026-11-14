@@ -19,7 +19,7 @@ import dynamic_credentials
 
 OWNER, REPO, BRANCH = 'fhria5', 'possessed-ui', 'main'
 BASE = '/home/hatch/workspace/possessed-ui/'
-MESSAGE = 'Possessed UI Phase 3: PBT Exorcism 100 runs + Demon Bugs auto-patched + quarantine + deck'
+MESSAGE = 'Possessed UI Phase 4: gothic polish + .kiro audit + MCP stdio + HP checklist'
 
 FILES = [
     '.nojekyll',
@@ -33,6 +33,7 @@ FILES = [
     'src/engine/cdp-observer.ts',
     'src/engine/exorcist-healer.ts',
     'src/engine/mcp-server.ts',
+    'src/engine/mcp-stdio.ts',
     'src/engine/possess-service.ts',
     'src/engine/exorcism-pbt.ts',
     'src/server.ts',
@@ -63,6 +64,7 @@ FILES = [
     'tests/exorcism.test.ts',
     'tests/e2e-phase2.cjs',
     'tests/e2e-phase3.cjs',
+    'tests/polish-phase4.cjs',
     'tools/deploy_possessed.py',
     'tools/run_exorcism.cjs',
     'tools/gen_assets.cjs',
