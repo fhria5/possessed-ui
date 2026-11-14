@@ -32,14 +32,21 @@ ter-push; verifikasi via API tree.
 Exit: repo publik ada, tree terverifikasi, `.kiro/` tidak terabaikan,
 0 baris kode engine/UI.
 
-## Phase 1 — MVP (berikutnya)
+## Phase 1 — MVP (SELESAI 14 Nov 2026 ~22:15 WITA)
 
-Scope: engine inti (Poltergeist PBT + CDP observer + Exorcist healer, Mode B
-dulu), UI skeleton split-screen Mode B, skenario 1 Chronos Race Poltergeist
-end-to-end (possess → crash $250 → exorcise → $750 + 0 error), demo Pages live.
+Scope tercapai: engine inti (Poltergeist PBT + CDP observer + Exorcist healer),
+MCP server (tools/list + tools/call), server Express Mode A, UI split-screen
+Mode B, skenario 1 Chronos Race Poltergeist end-to-end (possess → crash $250 →
+exorcise → $750 + 0 error), demo Pages live https://fhria5.github.io/possessed-ui/.
 
-Exit: demo live; skenario 1 jalan penuh di browser; Vitest + E2E hijau;
-footer demo memuat penanda versi + "simulasi, bukan CDP sungguhan".
+Angka: Vitest 48/48; E2E Playwright independen 24/24 (lokal, file = Pages);
+seed kanonis 20261121 → burst 3 klik → $250,00 / 3 charge, shrink 3 klik;
+patched re-run IMMUNE $750,00 / 1 charge; network sweep patched 12/12 tanpa
+stale-response win. Repo 60+ blob, commit Phase 1 (lihat GitHub).
+
+Catatan: Task 2.1 (.kiro) BELUM dicentang — capture Playwright/CDP sungguhan
+belum ada; forensik Phase 1 berasal dari run in-process terhadap target-app
+nyata + simulasi Mode B di browser. Jujur di footer demo + /api/health.
 
 ## Phase 2 — 3 skenario + MCP + guardrail
 
