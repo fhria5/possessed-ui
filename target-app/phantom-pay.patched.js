@@ -94,14 +94,19 @@ function createPhantomPay() {
     return charge;
   }
 
-  // EXORCISED: stale-response guard — superseded requests are ignored.
+  // EXORCISED: AbortController + request sequencing — superseded requests
+  // are cancelled, and a late response is ignored instead of overwriting.
   let latestPriceRequest = 0;
+  let priceAbort = null;
   function fetchPrice(currency, discountCode) {
+    if (priceAbort) priceAbort.abort();
+    const controller = new AbortController();
+    priceAbort = controller;
     const requestId = ++latestPriceRequest;
     const delay = 60 + Math.floor(Math.random() * 240); // 60–300ms acak
     return new Promise((resolve) => {
       setTimeout(() => {
-        if (requestId !== latestPriceRequest) {
+        if (controller.signal.aborted || requestId !== latestPriceRequest) {
           resolve({ priceCents: state.displayedPriceCents, currency: state.currency, discountCode: state.discountCode, stale: true });
           return;
         }
@@ -127,6 +132,14 @@ function createPhantomPay() {
     storage().setItem('phantom_cart', raw);
   }
 
+  // EXORCISED: escape HTML — muatan skrip dirender sebagai teks inert.
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  function cartItemHtml(item) {
+    return '<div class="cart-item">' + escapeHtml(item.name) + '</div>';
+  }
+
   function formatCents(cents) {
     return '$' + (cents / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
@@ -149,6 +162,7 @@ function createPhantomPay() {
     fetchPrice,
     saveCart,
     corruptCart,
+    cartItemHtml,
     snapshot,
     formatCents,
     ITEM_PRICE_CENTS,
