@@ -7,8 +7,8 @@ KOREKSI Phase 0: blueprint menandai semua tugas `[x]`. Belum ada yang dibangun
 - [x] **Task 1: Poltergeist Chaos & PBT Engine (`src/engine/poltergeist-pbt.ts`)**
   - [x] 1.1 Implement `fast-check` UI action sequence arbitraries (burst clicks, network delays, storage mutations).
   - [x] 1.2 Implement minimal counterexample action shrinking when an invariant fails.
-- [ ] **Task 2: CDP & DOM Forensics Medium (`src/engine/cdp-observer.ts`)**
-  - [ ] 2.1 Implement Playwright/CDP console exception, network timing, and DOM state capture.
+- [x] **Task 2: CDP & DOM Forensics Medium (`src/engine/cdp-observer.ts`)**
+  - [x] 2.1 Implement Playwright/CDP console exception, network timing, and DOM state capture.
   - [x] 2.2 Implement strict `localhost` / `127.0.0.1` URL scope guardrail.
 - [x] **Task 3: Exorcist Self-Healing Patcher (`src/engine/exorcist-healer.ts`)**
   - [x] 3.1 Synthesize idempotency lock, `AbortController`, and safe JSON storage patches.
@@ -23,3 +23,7 @@ KOREKSI Phase 1 (14 Nov 2026): 2.1 BELUM dicentang — capture Playwright/CDP
 sungguhan belum ada; forensik Phase 1 berasal dari run in-process terhadap
 target-app nyata + simulasi Mode B. Sisanya tercapai + terverifikasi
 (Vitest 48/48, E2E 24/24).
+
+KOREKSI Phase 2 (14 Nov 2026): 2.1 TERCENTANG — capture Playwright/CDP
+sungguhan terbukti (Chromium 156 nyata: DOM snapshot, pageerror stack
+trace `phantom-pay.js:58:23`, throttling 3G; Vitest 69/69, E2E 55/55).
