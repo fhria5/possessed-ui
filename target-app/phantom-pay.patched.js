@@ -1,5 +1,7 @@
 // EXORCISED — patched by Possessed UI Exorcist (inFlightLock + idempotencyKey
-// + stale-response guard + safe storage fallback). Generated from target-app/phantom-pay.js — the vulnerable original is never overwritten.
+// + 1000ms idempotency grace window (Phase 3 Demon Bug fix) + stale-response
+// guard + safe storage fallback + cart shape validation (Phase 3 Demon Bug
+// fix)). Generated from target-app/phantom-pay.js — the vulnerable original is never overwritten.
 /**
  * PhantomPay One-Click Checkout — VULNERABLE target app (Phase 0 artifact).
  *
@@ -50,7 +52,10 @@ function createPhantomPay() {
     cart: null,
   };
 
-  // EXORCISED: safe deserialization — corrupted cart falls back.
+  // EXORCISED: safe deserialization + shape validation — a cart that parses
+  // but is not { items: [...] } falls back too. Demon Bug (Phase 3): valid
+  // JSON scalars ('123', 'null', '{"items": "x"}') parsed fine yet poisoned
+  // state.cart, so any later cart.items access would throw.
   function loadCart() {
     const raw = storage().getItem('phantom_cart');
     if (raw === null) {
@@ -58,7 +63,11 @@ function createPhantomPay() {
       return state.cart;
     }
     try {
-      state.cart = JSON.parse(raw);
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== 'object' || !Array.isArray(parsed.items)) {
+        throw new Error('cart shape invalid: expected { items: [...] }');
+      }
+      state.cart = parsed;
     } catch (err) {
       state.consoleErrors.push('Storage parse failed, fell back to empty cart: ' + err.message);
       state.cart = { items: [] };
@@ -82,15 +91,25 @@ function createPhantomPay() {
     });
   }
 
-  // EXORCISED: idempotency lock — concurrent clicks share one charge.
+  // EXORCISED: idempotency lock + 1000ms grace window — clicks that land
+  // after the first charge settles (e.g. a 5-click burst spanning the 180ms
+  // /api/pay window) return the SAME charge instead of starting a second
+  // one. Demon Bug (Phase 3): a burst spanning >180ms charged twice ($500).
   let inFlightCheckout = null;
+  let lastCharge = null;
+  let lastCheckoutAt = 0;
+  const IDEMPOTENCY_WINDOW_MS = 1000;
   async function handleCheckout() {
     if (inFlightCheckout) return inFlightCheckout;
+    const now = Date.now();
+    if (lastCharge && now - lastCheckoutAt < IDEMPOTENCY_WINDOW_MS) return lastCharge;
     const idempotencyKey = 'idem_' + Date.now() + '_' + Math.floor(Math.random() * 1e6);
     inFlightCheckout = payApi(ITEM_PRICE_CENTS).finally(() => { inFlightCheckout = null; });
     const charge = await inFlightCheckout;
     charge.idempotencyKey = idempotencyKey;
     state.lastIdempotencyKey = idempotencyKey;
+    lastCharge = charge;
+    lastCheckoutAt = Date.now();
     return charge;
   }
 
