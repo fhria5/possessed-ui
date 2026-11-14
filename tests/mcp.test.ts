@@ -53,11 +53,21 @@ describe('callTool', () => {
   it('exorcise_and_patch heals and re-verifies to IMMUNE', async () => {
     const out = (await callTool('exorcise_and_patch', {
       scenarioId: 'RACE_DOUBLE_CHARGE',
-    })) as { verificationStatus: string; patchedFile: string; verification: PossessionReport };
+    })) as {
+      status: string;
+      verificationStatus: string;
+      patchedFile: string;
+      verification: PossessionReport;
+      postPatchRuns: number;
+      postPatchViolations: number;
+    };
+    expect(out.status).toBe('ok');
     expect(out.verificationStatus).toBe('EXORCISED_IMMUNE');
     expect(out.patchedFile).toBe('target-app/phantom-pay.patched.js');
     expect(out.verification.status).toBe('EXORCISED_IMMUNE');
-  });
+    expect(out.postPatchRuns).toBeGreaterThan(0);
+    expect(out.postPatchViolations).toBe(0);
+  }, 60000);
 
   it('unknown tool throws', async () => {
     await expect(callTool('summon_demon', {})).rejects.toThrow('unknown tool');
