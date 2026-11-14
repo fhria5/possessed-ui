@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Possessed UI Phase 2 — Paranormal Chaos &amp; Self-Healing Agent</title>
+<title>Possessed UI Phase 3 — Paranormal Chaos &amp; Self-Healing Agent</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -58,6 +58,7 @@
       <button type="button" class="tab active" role="tab" aria-selected="true" data-tab="forensics">Forensics &amp; Diff</button>
       <button type="button" class="tab" role="tab" aria-selected="false" data-tab="mcp">Live MCP Stream</button>
       <button type="button" class="tab" role="tab" aria-selected="false" data-tab="vault">.kiro/ Vault</button>
+      <button type="button" class="tab" role="tab" aria-selected="false" data-tab="exorcism">Exorcism Deck</button>
     </div>
     <div class="tab-panels">
       <div class="tab-panel active" id="panel-forensics" role="tabpanel">
@@ -83,6 +84,14 @@
           <code>kiro-files.json</code> (generated at deploy time from the repo).</p>
         <ul id="vault-list" class="vault-list"></ul>
         <pre id="vault-content" class="log" hidden></pre>
+      </div>
+      <div class="tab-panel" id="panel-exorcism" role="tabpanel">
+        <p class="muted">Phase 3 PBT Exorcism — 100 fast-check runs per scenario
+          against the patched target (fixed seeds, boundary-weighted
+          arbitraries). Demon Bugs found, shrunk, auto-patched, and
+          re-verified. Loaded from <code>exorcism-report.json</code>
+          (generated at build time by <code>tools/run_exorcism.cjs</code>).</p>
+        <div id="exorcism-deck">Loading exorcism report…</div>
       </div>
     </div>
   </section>
@@ -141,7 +150,7 @@
 </main>
 
 <footer class="foot">
-  <span>Possessed UI Phase 2 · 3 scenarios live (Race, Latency, Storage &amp; XSS)</span>
+  <span>Possessed UI Phase 3 · PBT Exorcism: 100 runs/scenario, Demon Bugs shrunk &amp; auto-patched</span>
   <span>Mode B static simulation — not a real CDP browser session · PhantomPay balance is simulated, not real money.</span>
 </footer>
 
